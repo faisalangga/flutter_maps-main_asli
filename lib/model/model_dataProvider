@@ -1,0 +1,24 @@
+import 'dart:convert';
+
+Provinsi provinsiFromJson(String str) => Provinsi.fromJson(json.decode(str));
+String provinsiToJson(Provinsi data) => json.encode(data.toJson());
+
+class Provinsi {
+  Provinsi({
+    required this.cPropinsi,
+  });
+  String cPropinsi;
+
+
+  factory Provinsi.fromJson(Map<String, dynamic> json) => Provinsi(
+    cPropinsi: json["cPropinsi"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "cPropinsi": cPropinsi,
+  };
+
+  @override
+  String toString() => cPropinsi;
+
+}

@@ -1,0 +1,486 @@
+import 'package:flutter/material.dart';
+import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
+import 'dart:ui' as ui;
+
+// import 'package:animated_floating_buttons/animated_floating_buttons.dart';
+//import 'package:geolocator/geolocator.dart';
+import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
+import 'package:json_table/json_table.dart';
+import 'package:koperasimobile/constant/decoration_constant.dart';
+import 'package:koperasimobile/constant/text_constant.dart';
+import 'package:koperasimobile/constant/dialog_constant.dart';
+import 'package:koperasimobile/controller/checkso_controller.dart';
+import 'package:koperasimobile/screen/home/landing_home.dart';
+import 'package:koperasimobile/utils/local_data.dart';
+import 'package:koperasimobile/widget/material/button_orange_widget.dart';
+import 'package:syncfusion_flutter_signaturepad/signaturepad.dart';
+
+class CheckinoutScreen extends StatefulWidget {
+  final String tipeCheck;
+
+  const CheckinoutScreen({Key? key, required this.tipeCheck}) : super(key: key);
+
+  @override
+  State<CheckinoutScreen> createState() => _CheckinoutScreenState();
+}
+
+class _CheckinoutScreenState extends State<CheckinoutScreen> {
+  bool servicestatus = false;
+  bool haspermission = false;
+  String dieMessage = "";
+  late LocationPermission permission;
+  late Position position;
+  String long = "", lat = "";
+  late StreamSubscription<Position> positionStream;
+  ChecksoController checksocontroller = Get.put(ChecksoController());
+
+  final GlobalKey<SfSignaturePadState> signatureGlobalKey = GlobalKey();
+  bool adaTtd = false;
+
+  final ImagePicker _picker = ImagePicker();
+  dynamic _pickImageError;
+  XFile? _imageFileList;
+  String datenow = DateFormat('yyyyMMdd-HHmm').format(DateTime.now());
+  String username = "";
+
+  @override
+  void initState() {
+    getUser();
+    if (widget.tipeCheck == "In") {
+      checksocontroller.getCheckinSO(
+          context: context,
+          callback: (result, error) {
+            if (result != null && result['error'] != true) {
+              tabelSO();
+            } else {
+              // DialogConstant.alertError('Data tidak ada');
+              print("Data SO Check In tidak ada");
+            }
+          });
+    }
+    checkGps();
+    super.initState();
+  }
+
+  getUser() async {
+    username = await LocalData.getData('user');
+  }
+
+  Widget tabelKosong = CircularProgressIndicator();
+
+  tabelSO() {
+    var columns = [
+      JsonTableColumn("NO_BUKTI", label: "Sales Order#"),
+      JsonTableColumn("TGL", label: "Tanggal", valueBuilder: formatTanggal),
+      JsonTableColumn("NA_BRG", label: "Barang"),
+      JsonTableColumn("NOTES", label: "Notes"),
+      JsonTableColumn("KG", label: "KG", valueBuilder: formatRibuan),
+      JsonTableColumn("TOTAL", label: "Total", valueBuilder: formatRibuan),
+    ];
+    setState(() {
+      tabelKosong = JsonTable(
+        checksocontroller.jsonSample,
+        columns: columns,
+        allowRowHighlight: true,
+        rowHighlightColor: Colors.yellow[500]!.withOpacity(0.7),
+        // paginationRowCount: 10,
+        tableHeaderBuilder: (header) {
+          return Container(
+            padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+            decoration: BoxDecoration(
+                border: Border.all(width: 0.5), color: Colors.grey[300]),
+            child: Text(
+              header!,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontWeight: FontWeight.w700,
+                  fontSize: 14.0,
+                  color: Colors.black87),
+            ),
+          );
+        },
+        tableCellBuilder: (value) {
+          return Container(
+            padding: EdgeInsets.symmetric(horizontal: 4.0, vertical: 10.0),
+            decoration: BoxDecoration(
+                border: Border.all(
+                    width: 0.5, color: Colors.grey.withOpacity(0.5))),
+            child: Text(
+              value,
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 14.0, color: Colors.grey[900]),
+            ),
+          );
+        },
+      );
+    });
+  }
+
+  checkGps() async {
+    dieMessage = "";
+    servicestatus = await Geolocator.isLocationServiceEnabled();
+    if (servicestatus) {
+      permission = await Geolocator.checkPermission();
+
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+        if (permission == LocationPermission.denied) {
+          dieMessage = 'Location permissions are denied';
+          print(dieMessage);
+        } else if (permission == LocationPermission.deniedForever) {
+          dieMessage = "Location permissions are permanently denied";
+          print(dieMessage);
+        } else {
+          haspermission = true;
+        }
+      } else {
+        haspermission = true;
+      }
+
+      if (haspermission) {
+        setState(() {
+          //refresh the UI
+        });
+
+        await getLocation();
+      }
+    } else {
+      dieMessage = "GPS Service is not enabled, turn on GPS location";
+      print(dieMessage);
+    }
+
+    setState(() {
+      //refresh the UI
+    });
+  }
+
+  getLocation() async {
+    position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+    print(position.longitude);
+    print(position.latitude);
+
+    long = position.longitude.toString();
+    lat = position.latitude.toString();
+
+    setState(() {
+      //refresh UI
+    });
+
+    LocationSettings locationSettings = LocationSettings(
+      accuracy: LocationAccuracy.high, //accuracy of the location data
+      distanceFilter: 100, //minimum distance (measured in meters) a
+      //device must move horizontally before an update event is generated;
+    );
+
+    StreamSubscription<Position> positionStream =
+        Geolocator.getPositionStream(locationSettings: locationSettings)
+            .listen((Position position) {
+      print(position.longitude);
+      print(position.latitude);
+
+      long = position.longitude.toString();
+      lat = position.latitude.toString();
+
+      setState(() {
+        //refresh UI on update
+      });
+    });
+
+    checksocontroller.latitude.value = lat;
+    checksocontroller.longitude.value = long;
+  }
+
+  void _handleClearButtonPressed() {
+    signatureGlobalKey.currentState!.clear();
+    adaTtd = false;
+  }
+
+  void _handleViewButtonPressed() async {
+    final data =
+        await signatureGlobalKey.currentState!.toImage(pixelRatio: 3.0);
+    final bytes = await data.toByteData(format: ui.ImageByteFormat.png);
+    await Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (BuildContext context) {
+          return Scaffold(
+            appBar: AppBar(
+              title: Text("View Signature"),
+              centerTitle: true,
+            ),
+            body: Center(
+              child: Container(
+                color: Colors.grey[300],
+                child: Image.memory(bytes!.buffer.asUint8List()),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  saveSignature() async {
+    String namaFile = checksocontroller.nomorSo.text +
+        "_" +
+        datenow +
+        "_" +
+        username +
+        "_" +
+        checksocontroller.tipe.value;
+    checksocontroller.ttdcheck.value = "ttd_" + namaFile + ".png";
+    final sign =
+        await signatureGlobalKey.currentState!.toImage(pixelRatio: 3.0);
+    final data = await sign.toByteData(format: ui.ImageByteFormat.png);
+    if (adaTtd == false) return;
+    final encoded = base64.encode(data!.buffer.asUint8List());
+    http.post(Uri.parse("https://dharmaguna.id/tokool/image.php"), body: {
+      "image": encoded,
+      "name": "tandatangan/ttd_" + namaFile + ".png",
+    }).then((res) {
+      if (res.statusCode == 200)
+        setState(() {
+          signatureGlobalKey.currentState!.clear();
+          namaFile = "";
+          checksocontroller.ttdcheck.value = "ttd_" + namaFile + ".png";
+        });
+      print(res.statusCode);
+    }).catchError((err) {
+      DialogConstant.alertError('Kesalahan upload Signature.(' + err + ')');
+    });
+  }
+
+  takePhoto() async {
+    print('Picker is called');
+    try {
+      final XFile? pickedFile = await _picker.pickImage(
+        source: ImageSource.camera,
+        maxWidth: 800,
+        maxHeight: 600,
+        // imageQuality: 100,
+      );
+      setState(() {
+        _imageFileList = pickedFile;
+      });
+    } catch (e) {
+      setState(() {
+        _pickImageError = e;
+      });
+    }
+  }
+
+  void uploadPhoto() {
+    if (_imageFileList == null) return;
+    String namaFile = checksocontroller.nomorSo.text +
+        "_" +
+        datenow +
+        "_" +
+        username +
+        "_" +
+        checksocontroller.tipe.value;
+    checksocontroller.fotocheck.value = "foto_" + namaFile + ".jpeg";
+    String base64Image =
+        base64Encode(File(_imageFileList!.path).readAsBytesSync());
+    http.post(Uri.parse("https://dharmaguna.id/tokool/image.php"), body: {
+      "image": base64Image,
+      "name": "foto/foto_" + namaFile + ".jpeg",
+    }).then((res) {
+      if (res.statusCode == 200)
+        setState(() {
+          _imageFileList = null;
+          namaFile = "";
+          checksocontroller.fotocheck.value = "foto_" + namaFile + ".jpeg";
+        });
+      print(res.statusCode);
+    }).catchError((err) {
+      DialogConstant.alertError('Kesalahan upload Foto.(' + err + ')');
+    });
+  }
+
+  checkInOutProcess() async {
+    checksocontroller.tipe.value = widget.tipeCheck.toUpperCase();
+    setState(() {
+      datenow = DateFormat('yyyyMMdd-HHmm').format(DateTime.now());
+    });
+    await checkGps();
+    if (widget.tipeCheck == "Out") await saveSignature();
+    uploadPhoto();
+    if (dieMessage != "") {
+      DialogConstant.showSnackBar(dieMessage);
+    } else {
+      checksocontroller.validationCheckInOut(
+          context: context,
+          callback: (result, error) {
+            if (result != null && result['error'] != true) {
+              // DialogConstant.alertError('Selesai Check '+widget.tipeCheck);
+              showDialog(
+                  context: Get.context!,
+                  barrierDismissible: true,
+                  builder: (BuildContext context) {
+                    return Dialog(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5)),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          SizedBox(height: 16),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            child: Text(
+                              'Selesai Check ' + widget.tipeCheck,
+                              style: TextConstant.regular,
+                            ),
+                          ),
+                          SizedBox(height: 16),
+                          Divider(height: 0),
+                          TextButton(
+                            child: Text(
+                              'OKE',
+                              style: TextConstant.medium
+                                  .copyWith(color: Colors.blue),
+                            ),
+                            onPressed: () => Get.offAll(LandingHome()),
+                          ),
+                          SizedBox(height: 4),
+                        ],
+                      ),
+                    );
+                  });
+            } else {
+              DialogConstant.alertError('Kesalahan Check ' + widget.tipeCheck);
+            }
+          });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Check " + widget.tipeCheck),
+        centerTitle: true,
+        backgroundColor: Colors.green,
+        automaticallyImplyLeading: false,
+      ),
+      body: Container(
+        // alignment: Alignment.center,
+        padding: EdgeInsets.all(10),
+        child: SingleChildScrollView(
+            child: Column(children: [
+          // Text(servicestatus? "GPS is Enabled": "GPS is disabled."),
+          // Text(haspermission? "GPS is Enabled": "GPS is disabled."),
+          // Text("Longitude: $long", style:TextStyle(fontSize: 20)),
+          // Text("Latitude: $lat", style: TextStyle(fontSize: 20),),
+          // SizedBox(height: 40),
+
+          Text(dieMessage, style: TextStyle(fontSize: 16, color: Colors.red)),
+          SizedBox(height: 10),
+          Container(
+            child: Row(
+              children: [
+                Icon(Icons.file_open_outlined,
+                    size: 24, color: Colors.grey.shade500),
+                Expanded(
+                  child: Container(
+                    margin: EdgeInsets.symmetric(horizontal: 20),
+                    height: 40,
+                    child: TextField(
+                      maxLength: 25,
+                      controller: checksocontroller.nomorSo,
+                      decoration: DecorationConstant.inputDecor().copyWith(
+                          hintText: "Sales Order#",
+                          counterText: '',
+                          contentPadding: EdgeInsets.only(top: 0)),
+                      onSubmitted: (value) {
+                        tabelSO();
+                      },
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+          SizedBox(height: 10),
+          if (widget.tipeCheck == "In") ...[
+            tabelKosong,
+            SizedBox(height: 25),
+          ],
+          if (widget.tipeCheck == "Out") ...[
+            Text(
+              "Signature",
+              style: TextStyle(fontSize: 18),
+            ),
+            Padding(
+                padding: EdgeInsets.all(10),
+                child: Container(
+                    child: SfSignaturePad(
+                        onDraw: (offset, time) {
+                          adaTtd = true;
+                        },
+                        key: signatureGlobalKey,
+                        backgroundColor: Colors.white,
+                        strokeColor: Colors.black,
+                        minimumStrokeWidth: 1.0,
+                        maximumStrokeWidth: 4.0),
+                    decoration:
+                        BoxDecoration(border: Border.all(color: Colors.grey)))),
+            Row(children: <Widget>[
+              TextButton(
+                child: Text("View", style: TextStyle(color: Colors.green)),
+                onPressed: _handleViewButtonPressed,
+              ),
+              TextButton(
+                child: Text("Clear", style: TextStyle(color: Colors.red)),
+                onPressed: _handleClearButtonPressed,
+              )
+            ], mainAxisAlignment: MainAxisAlignment.spaceEvenly),
+            SizedBox(height: 25),
+          ],
+          ButtonOrangeWidget(text: 'Take Photo', onClick: () => takePhoto()),
+          SizedBox(height: 10),
+          Container(
+            child: Center(
+              child: _imageFileList == null
+                  ? new Text('No Image to Show')
+                  : Image.file(File(_imageFileList!.path)),
+            ),
+          ),
+        ])),
+      ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor:
+            widget.tipeCheck == "Out" ? Colors.amber : Colors.lightGreen,
+        onPressed: () => checkInOutProcess(),
+        heroTag: "Check " + widget.tipeCheck,
+        tooltip: 'Check ' + widget.tipeCheck,
+        child: widget.tipeCheck == "Out"
+            ? Icon(Icons.logout)
+            : Icon(Icons.receipt_long_rounded),
+      ),
+    );
+  }
+
+  String formatTanggal(value) {
+    if (value != "") {
+      var dateTime = DateFormat("yyyy-MM-dd").parse(value.toString());
+      return DateFormat("dd/MM/yyyy").format(dateTime);
+    } else {
+      return "";
+    }
+  }
+
+  String formatRibuan(value) {
+    if (value != "") {
+      final formatter = new NumberFormat("#,##0");
+      return formatter.format(double.parse(value));
+    } else {
+      return 0.toString();
+    }
+  }
+}
