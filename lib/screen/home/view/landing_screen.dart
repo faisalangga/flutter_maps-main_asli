@@ -46,7 +46,7 @@ class _LandingScreenState extends State<LandingScreen> {
         pinjamanString = saldopnjString;
         // print("fais simpananString $simpananString");
         // print("fais pinjamanString $pinjamanString");
-        if(simpananString != "" && pinjamanString !=""){
+        if (simpananString != "" && pinjamanString != "") {
           isLoading = false;
         }
         // print('fais saldos atas : $simpananString');
@@ -230,7 +230,8 @@ class _LandingScreenState extends State<LandingScreen> {
                       height: 220,
                       child: Container(
                         decoration: BoxDecoration(
-                          color: Colors.grey.shade200,
+                          // color: Colors.grey.shade200,
+                          color: Colors.transparent,
                         ),
                         child: Stack(
                           children: <Widget>[
@@ -429,7 +430,8 @@ class _LandingScreenState extends State<LandingScreen> {
                                                       fontSize: 15.0,
                                                     ),
                                                   )
-                                                : AppShimmer(width:width*0.25)
+                                                : AppShimmer(
+                                                    width: width * 0.25)
                                           ],
                                         ),
                                       ),
@@ -476,13 +478,16 @@ class _LandingScreenState extends State<LandingScreen> {
                                                 fontSize: 12.0,
                                               ),
                                             ),
-                                            isLoading == false ? Text(
-                                              'Rp. ${duet(simpananString!)}',
-                                              style: TextStyle(
-                                                color: Colors.black,
-                                                fontSize: 15.0,
-                                              ),
-                                            ): AppShimmer(width: width*0.25),
+                                            isLoading == false
+                                                ? Text(
+                                                    'Rp. ${duet(simpananString!)}',
+                                                    style: TextStyle(
+                                                      color: Colors.black,
+                                                      fontSize: 15.0,
+                                                    ),
+                                                  )
+                                                : AppShimmer(
+                                                    width: width * 0.25),
                                           ],
                                         ),
                                       ),

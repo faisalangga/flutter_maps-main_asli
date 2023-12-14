@@ -1,12 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:koperasimobile/controller/pengajuan_simp_controller.dart';
-import 'package:koperasimobile/screen/auth/pengajuan_simp/pengajuan_simp_ins_screen.dart';
 import 'package:koperasimobile/screen/home/view/pengajuan_pinj_screen.dart';
-//import 'package:koperasimobile/screen/home/view/pengajuan_simp_screen.dart';
-//import 'package:koperasimobile/screen/home/view/supp_screen.dart';
-//import 'package:koperasimobile/screen/auth/supp/supp_ins_screen.dart';
-//import 'package:koperasimobile/controller/supp_controller.dart';
 
 class AjuSimpHome extends StatefulWidget {
   const AjuSimpHome({Key? key}) : super(key: key);

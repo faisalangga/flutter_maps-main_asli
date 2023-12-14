@@ -484,7 +484,7 @@ class _PinjamanGridWidgetState extends State<PinjamanGridWidget> {
                           ' Pinjaman : ${duet(pinjaman.mNilaiPinjaman ?? '')}   ',
                           style: TextStyle(
                             fontWeight: FontWeight.w700,
-                            fontSize: 12,
+                            fontSize: 14,
                             color: Colors.black,
                           ),
                           textAlign: TextAlign.center,
@@ -492,7 +492,7 @@ class _PinjamanGridWidgetState extends State<PinjamanGridWidget> {
                       ),
                     ],
                   ),
-                  SizedBox(height: 3),
+                  SizedBox(height: 1),
                   Text(
                     '  ${pinjaman.tgl}',
                     style: TextStyle(
@@ -502,9 +502,19 @@ class _PinjamanGridWidgetState extends State<PinjamanGridWidget> {
                     ),
                     textAlign: TextAlign.start,
                   ),
-                  SizedBox(height: 3),
+                  SizedBox(height: 2),
                   Text(
                     '  Tenor : ${pinjaman.tenor} Bulan',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w400,
+                      color: Colors.black,
+                      fontSize: 14,
+                    ),
+                    textAlign: TextAlign.start,
+                  ),
+                  SizedBox(height: 2),
+                  Text(
+                    '  Tagihan : ${duet(pinjaman.mValue1 ?? '')}',
                     style: TextStyle(
                       fontWeight: FontWeight.w400,
                       color: Colors.black,

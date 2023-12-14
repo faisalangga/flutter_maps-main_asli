@@ -1,36 +1,26 @@
 import 'dart:convert';
 
 import 'package:dropdown_search/dropdown_search.dart';
-import 'package:flutter_dialogs/flutter_dialogs.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
-// import 'package:get/get.dart';
+import 'package:flutter_dialogs/flutter_dialogs.dart';
+import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import 'package:koperasimobile/constant/text_constant.dart';
 import 'package:koperasimobile/constant/utils_rp.dart';
 import 'package:koperasimobile/screen/home/landing_home.dart';
-
-// import 'package:koperasimobile/screen/home/view/landing_screen.dart';
-// import 'package:koperasimobile/utils/Utils.dart';
+import 'package:koperasimobile/utils/Utils.dart';
 import 'package:koperasimobile/utils/utils_dialog.dart';
-import 'package:lottie/lottie.dart';
-import 'package:koperasimobile/constant/text_constant.dart';
 import 'package:koperasimobile/widget/material/button_green_widget.dart';
-import '../../../constant/const_url.dart';
+import 'package:lottie/lottie.dart';
 
-// import '../../../constant/decoration_constant.dart';
-import '../../../constant/dialog_constant.dart';
+import '../../../constant/const_url.dart';
 import '../../../constant/image_constant.dart';
 import '../../../controller/pengajuan_simp_controller.dart';
 import '../../../model/model_jaminan.dart';
 import '../../../model/model_tenor.dart';
-import '../../../utils/Utils.dart';
 import '../../../utils/utils_formatnumber.dart';
-import 'package:http/http.dart' as http;
-
-// import '../../../widget/app_dropdown.dart';
-// import '../../home/pengajuan_simp_home.dart';
 
 class AjuSimpInsScreen extends StatefulWidget {
   final String tipeCheck;

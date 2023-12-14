@@ -276,7 +276,7 @@ class _TartunScreenState extends State<TarikTunaiInsScreen> {
                 SizedBox(height: 10),
                 Container(
                   width: width,
-                  height: height*0.10,
+                  height: height * 0.10,
                   child: TextField(
                     keyboardType: TextInputType.number,
                     inputFormatters: [
@@ -385,7 +385,7 @@ class _TartunScreenState extends State<TarikTunaiInsScreen> {
                 SizedBox(height: 10),
                 Container(
                   width: width,
-                  height: height*0.10,
+                  height: height * 0.10,
                   child: TextField(
                     keyboardType: TextInputType.number,
                     inputFormatters: [
@@ -556,8 +556,7 @@ class _TartunScreenState extends State<TarikTunaiInsScreen> {
                         return;
                       }
                       if (saldosimp <= double.tryParse(recomenNominal!)!) {
-                        DialogConstant.alertError(
-                            'Saldo Anda Kurang !!');
+                        DialogConstant.alertError('Saldo Anda Kurang !!');
                         return;
                       } else {
                         // print('fais1 klik');
@@ -589,30 +588,32 @@ class _TartunScreenState extends State<TarikTunaiInsScreen> {
                                       'biayaadmin': '$badmin',
                                       'totalTarikan': totalPenarikan.toString(),
                                     };
-                                    await (badmin) != null ? tariktunaicontroller
-                                        .validationTarikTunai(
-                                            context: context,
-                                            data: data,
-                                            callback: (result, error) async {
-                                              if (result != null &&
-                                                  result['error'] != true) {
-                                                // print('fais1 $result');
-                                                Navigator.pop(context);
-                                                Navigator.pop(context);
-                                                Navigator.pop(context);
-                                                Navigator.pop(context);
-                                                // print('fais1 last');
-                                                Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        LandingHome(),
-                                                  ),
-                                                );
-                                              }
-                                            })
-                                    : DialogConstant.loading(
-                                    context!, 'Jaringan Ke Server Bermasalah...');
+                                    await (badmin) != null
+                                        ? tariktunaicontroller
+                                            .validationTarikTunai(
+                                                context: context,
+                                                data: data,
+                                                callback:
+                                                    (result, error) async {
+                                                  if (result != null &&
+                                                      result['error'] != true) {
+                                                    // print('fais1 $result');
+                                                    Navigator.pop(context);
+                                                    Navigator.pop(context);
+                                                    Navigator.pop(context);
+                                                    Navigator.pop(context);
+                                                    // print('fais1 last');
+                                                    Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            LandingHome(),
+                                                      ),
+                                                    );
+                                                  }
+                                                })
+                                        : DialogConstant.loading(context!,
+                                            'Jaringan Ke Server Bermasalah...');
                                   },
                                 ),
                                 BasicDialogAction(
