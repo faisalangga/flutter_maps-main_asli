@@ -113,7 +113,6 @@ class AjuSimpController extends GetxController {
     // print('pais data ${preferences.getString("username")}');
 
     DialogConstant.loading(context!, 'Memperoses...');
-
     post['bulan'] = data['tenor'];
     post['pinjaman'] = data['pinjaman'];
     post['pokok'] = data['pokok'];
@@ -126,6 +125,7 @@ class AjuSimpController extends GetxController {
     post['keperluan'] = edtnote.text;
     post['jaminan'] = data['jaminan'];
     post['duedate'] = data['duedate'];
+    post['sisa'] = data['sisa'];
     print('fais $post');
 
     API.basePostGolang(ConstUrl.insertPinjaman, post, header, true,

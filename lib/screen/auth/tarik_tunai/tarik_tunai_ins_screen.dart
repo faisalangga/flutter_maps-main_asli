@@ -1,13 +1,15 @@
 import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dialogs/flutter_dialogs.dart';
-import 'package:koperasimobile/utils/utils_dialog.dart';
-import 'package:lottie/lottie.dart';
 import 'package:koperasimobile/constant/text_constant.dart';
+import 'package:koperasimobile/utils/utils_dialog.dart';
 import 'package:koperasimobile/widget/material/button_green_widget.dart';
+import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import '../../../api/api.dart';
 import '../../../constant/const_url.dart';
 import '../../../constant/dialog_constant.dart';
@@ -545,6 +547,10 @@ class _TartunScreenState extends State<TarikTunaiInsScreen> {
                 ButtonGreenWidget(
                   text: 'Lanjut',
                   onClick: () {
+                    if (nabank! == null || nabank! == '-' && norek! == null || norek! == '-'){
+                      DialogConstant.alertError('Rekening Kosong !!');
+                      return;
+                    }
                     if (recomenNominal! == null || recomenNominal! == '') {
                       DialogConstant.alertError('Nominal tidak boleh kosong');
                       return;

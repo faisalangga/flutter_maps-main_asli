@@ -51,6 +51,7 @@ class _AjuSimpScreenState extends State<AjuSimpInsScreen> {
   int? jumtot = 0;
 
   int id = 1;
+
   // bool _switchValue = true;
   // bool _obscureText = true;
 
@@ -102,6 +103,16 @@ class _AjuSimpScreenState extends State<AjuSimpInsScreen> {
 
       int total = pokok + bunga + inibadmin;
       return total;
+    }
+    return 0;
+  }
+
+  int Sisa() {
+    if (pinjamanValue != null && pinjamanValue! > 0) {
+      int pokok = int.tryParse('${viewjml()}'!) ?? 0;
+      int tnr = int.tryParse(tenor()!) ?? 0;
+      int sisa = pokok * tnr;
+      return sisa;
     }
     return 0;
   }
@@ -178,8 +189,7 @@ class _AjuSimpScreenState extends State<AjuSimpInsScreen> {
                                 pinjamanValue = 0;
                               } else {
                                 pinjamanValue =
-                                    int.tryParse(value.replaceAll(',', '')) ??
-                                        0;
+                                    int.tryParse(value.replaceAll(',', '')) ?? 0;
                               }
                             });
                           },
@@ -279,12 +289,13 @@ class _AjuSimpScreenState extends State<AjuSimpInsScreen> {
                           // print('faisxxxx + $_jasa $_inibiayadm');
                           DateTime hariini = DateTime.now();
                           // print ('fais' + tenor()! ??"0");
-                          DateTime dueDate = addMonths(hariini, int.tryParse(tenor()!)??0);
+                          DateTime dueDate =
+                              addMonths(hariini, int.tryParse(tenor()!) ?? 0);
                           // DateTime dueDate = hariini.add(Duration(days: ((int.tryParse(tenor()!) ?? 0) - 1) * 30));
                           _duedate = dueDate.toString();
                           // print('faisaasssss');
                           // print('faisaaa + $_duedate');
-                           print(tenor());
+                          print(tenor());
                           // print('fais $_valueCompSelected');
                         });
                       },
@@ -454,7 +465,9 @@ class _AjuSimpScreenState extends State<AjuSimpInsScreen> {
                     ),
                   ],
                 )),
-                SizedBox(height: 10,),
+                SizedBox(
+                  height: 10,
+                ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Container(
@@ -644,7 +657,8 @@ class _AjuSimpScreenState extends State<AjuSimpInsScreen> {
                                           'jaminan':
                                               '$_jaminanValueCompSelected',
                                           'tenor': tenor(),
-                                          'duedate' : '$_duedate'
+                                          'duedate': '$_duedate',
+                                          'sisa' : '${Sisa()}',
                                         };
                                         // print('fais' +
                                         //     ajusimpcontroller.edtjaminan.text);

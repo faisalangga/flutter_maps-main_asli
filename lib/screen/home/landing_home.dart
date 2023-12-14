@@ -19,17 +19,11 @@ class LandingHome extends StatefulWidget {
 
 class _LandingHomeState extends State<LandingHome> {
   String? saldopnjString;
-
   String? saldosimpString;
-
   String? cmember;
-
   PageController controller = PageController();
-
   HomeController homeController = Get.put(HomeController());
-
   DateTime newTime = DateTime.now();
-
   DateTime oldTime = DateTime.now();
 
   @override
