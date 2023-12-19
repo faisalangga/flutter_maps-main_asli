@@ -129,8 +129,8 @@ class _LandingScreenState extends State<LandingScreen> {
       }
     }
 
-    var size = MediaQuery.of(context).size;
-    var width = MediaQuery.of(context).size.width;
+    var size   = MediaQuery.of(context).size;
+    var width  = MediaQuery.of(context).size.width;
     var height = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
@@ -277,7 +277,6 @@ class _LandingScreenState extends State<LandingScreen> {
                                       ),
                                       margin: const EdgeInsets.all(5),
                                       child: InkWell(
-                                        // onTap: () => Get.to(TopUpPage()),
                                         onTap: () => Get.to(SubMenuSaldo()),
                                         splashColor: Colors.blue,
                                         child: Center(
@@ -304,7 +303,6 @@ class _LandingScreenState extends State<LandingScreen> {
                                       ),
                                       margin: const EdgeInsets.all(5),
                                       child: InkWell(
-                                          // onTap: () {},
                                           onTap: () => Get.to(AjuSimpHome()),
                                           splashColor: Colors.blue,
                                           child: Center(

@@ -8,6 +8,8 @@ class ConstUrl {
   // API GOLANG
   static String login           = "/login";
   static String insertMember    = "/insertMember";
+  static String upddatabank     = "/updateDTBank";
+  static String upddatamember   = "/updateDTMember";
   static String provinzi        = "/place";
   static String kota            = "/place";
   static String kecamatan       = "/place";

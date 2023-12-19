@@ -235,22 +235,22 @@ class _SuppScreenState extends State<SuppEdtScreen> {
                 ),
               ),
               SizedBox(height: 35),
-              ButtonGreenWidget(
-                text: 'Simpan',
-                onClick: () => membercontroller.editsupp(
-                    context: context,
-                    callback: (result, error) {
-                      if (result != null && result['error'] != true) {
-                        // Get.back();
-                        // Get.to(SuppScreen());
-                        Get.off(SuppHome());
-                        DialogConstant.alertError('Edit Data Berhasil');
-                      }
-                      if (error != null) {
-                        DialogConstant.alertError('Edit Data Gagal');
-                      }
-                    }),
-              ),
+              // ButtonGreenWidget(
+              //   text: 'Simpan',
+              //   onClick: () => membercontroller.editsupp(
+              //       context: context,
+              //       callback: (result, error) {
+              //         if (result != null && result['error'] != true) {
+              //           // Get.back();
+              //           // Get.to(SuppScreen());
+              //           Get.off(SuppHome());
+              //           DialogConstant.alertError('Edit Data Berhasil');
+              //         }
+              //         if (error != null) {
+              //           DialogConstant.alertError('Edit Data Gagal');
+              //         }
+              //       }),
+              // ),
               SizedBox(height: 20),
             ],
           ),

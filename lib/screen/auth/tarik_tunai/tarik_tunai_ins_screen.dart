@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dialogs/flutter_dialogs.dart';
+import 'package:get/get.dart';
 import 'package:koperasimobile/constant/text_constant.dart';
 import 'package:koperasimobile/utils/utils_dialog.dart';
 import 'package:koperasimobile/widget/material/button_green_widget.dart';
@@ -20,6 +21,7 @@ import '../../../model/model_landingpage.dart';
 import '../../../utils/utils_formatnumber.dart';
 import '../../../widget/tabungan/App_recomen_nominal.dart';
 import '../../home/landing_home.dart';
+import '../member/bank_norek_upd_screen.dart';
 
 class TarikTunaiInsScreen extends StatefulWidget {
   final String tipeCheck;
@@ -176,6 +178,14 @@ class _TartunScreenState extends State<TarikTunaiInsScreen> {
   }
 
   bool isExpanded = false;
+  bool showUpdateButton = true;
+
+  bool _showUpdateButton() {
+    return '$nabank' == '-' ||
+        '$norek' == '-' ||
+        '$nabank' == null ||
+        '$norek' == null;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -278,45 +288,91 @@ class _TartunScreenState extends State<TarikTunaiInsScreen> {
                 SizedBox(height: 10),
                 Container(
                   width: width,
-                  height: height * 0.10,
-                  child: TextField(
-                    keyboardType: TextInputType.number,
-                    inputFormatters: [
-                      FilteringTextInputFormatter.digitsOnly,
-                      ThousandsFormatter(),
+                  child: Column(
+                    children: [
+                      TextField(
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                          ThousandsFormatter(),
+                        ],
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                        ),
+                        controller: TextEditingController(
+                            text: ('$nabank ($norek)' != null &&
+                                    '$nabank' != '-' &&
+                                    '$norek' != '-' &&
+                                    '$nabank' != null &&
+                                    '$norek' != null)
+                                ? '$nabank ($norek)'
+                                : ''),
+                        readOnly: true,
+                        decoration: InputDecoration(
+                          prefixIcon: Icon(
+                            Icons.account_box_outlined,
+                            color: Colors.black,
+                          ),
+                          floatingLabelBehavior: FloatingLabelBehavior.never,
+                          labelText: ('$nabank || $norek' != null &&
+                                  '$nabank' != '-' &&
+                                  '$norek' != '-' &&
+                                  '$nabank' != null &&
+                                  '$norek' != null)
+                              ? '$nabank || $norek'
+                              : '',
+                          border: InputBorder.none,
+                          filled: true,
+                          fillColor: Colors.grey[200],
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide.none,
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide.none,
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                          suffixIcon: (_showUpdateButton())
+                              ? IconButton(
+                                  icon: Icon(Icons.warning, color: Colors.red),
+                                    onPressed: () {
+                                    Get.to(SuppInsScreen(
+                                    tipeCheck: 'edit',
+                                    ));
+                                  },
+                                )
+                              : null,
+                        ),
+                      ),
+                      Container(
+                        height: 15,
+                        child: Visibility(
+                          visible: showUpdateButton,
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(height: 5,),
+                              Text(
+                                'Lengkapi Data Bank dan Nomor Rekening Anda  ',
+                                style: TextStyle(
+                                  color: Colors.redAccent,
+                                  fontSize: size.height * 0.015,
+                                ),
+                              ),
+                              Icon(
+                                Icons.info_outline,
+                                color: Colors.red,
+                                size: height*0.020,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
                     ],
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                    ),
-                    controller: TextEditingController(
-                        text: '$nabank ( $norek )' != null
-                            ? '$nabank ( $norek )'
-                            : ''),
-                    readOnly: true,
-                    decoration: InputDecoration(
-                      prefixIcon: Icon(
-                        Icons.account_box_outlined,
-                        color: Colors.black,
-                      ),
-                      floatingLabelBehavior: FloatingLabelBehavior.never,
-                      labelText: '$nabank || $norek' != null
-                          ? '$nabank || $norek'
-                          : 'Nama Bank Kosong',
-                      border: InputBorder.none,
-                      filled: true,
-                      fillColor: Colors.grey[200],
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                    ),
                   ),
                 ),
-                SizedBox(height: 0),
+
+                SizedBox(height: 10),
                 Text(
                   'PILIH JUMLAH',
                   style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
@@ -387,7 +443,6 @@ class _TartunScreenState extends State<TarikTunaiInsScreen> {
                 SizedBox(height: 10),
                 Container(
                   width: width,
-                  height: height * 0.10,
                   child: TextField(
                     keyboardType: TextInputType.number,
                     inputFormatters: [
@@ -547,7 +602,9 @@ class _TartunScreenState extends State<TarikTunaiInsScreen> {
                 ButtonGreenWidget(
                   text: 'Lanjut',
                   onClick: () {
-                    if (nabank! == null || nabank! == '-' && norek! == null || norek! == '-'){
+                    if (nabank! == null ||
+                        nabank! == '-' && norek! == null ||
+                        norek! == '-') {
                       DialogConstant.alertError('Rekening Kosong !!');
                       return;
                     }

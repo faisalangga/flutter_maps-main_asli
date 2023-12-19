@@ -50,7 +50,7 @@ class _SubMenuTabungan extends State<SubMenuTabungan> {
                     color: AppColors.abu,
                     shape: RoundedRectangleBorder(
                       borderRadius:
-                      BorderRadius.circular(10), // Radius sudut
+                      BorderRadius.circular(10),
                     ),
                     margin: const EdgeInsets.all(5),
                     child: InkWell(

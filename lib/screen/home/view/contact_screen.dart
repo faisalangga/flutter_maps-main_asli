@@ -10,7 +10,6 @@ class ContactScreen extends StatefulWidget {
 }
 
 class _ContactScreenState extends State<ContactScreen> {
-
   String url() {
     var phone = "+62-XXX-XXX-XXX";
     if (Platform.isIOS) {
@@ -36,7 +35,7 @@ class _ContactScreenState extends State<ContactScreen> {
     );
     await launchUrl(launchUri);
   }
-  
+
   Future<void> launchWebView(Uri url) async {
     if (!await launchUrl(
       url,
@@ -47,7 +46,7 @@ class _ContactScreenState extends State<ContactScreen> {
       throw Exception('Could not launch webview $url');
     }
   }
-  
+
   Future<void> launchWebBrowser(Uri url) async {
     if (!await launchUrl(
       url,
@@ -60,17 +59,17 @@ class _ContactScreenState extends State<ContactScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Contact Us"),
-        centerTitle: true,
-        backgroundColor: Colors.green,
-        // automaticallyImplyLeading: false,
-      ),
-      body: Container(
-        padding: EdgeInsets.all(20),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
+        appBar: AppBar(
+          title: Text("Contact Us"),
+          centerTitle: true,
+          backgroundColor: Colors.green,
+          // automaticallyImplyLeading: false,
+        ),
+        body: Container(
+          padding: EdgeInsets.all(20),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
                 GestureDetector(
                   onTap: () {
                     // launch("tel://878-5144-1879");
@@ -79,9 +78,15 @@ class _ContactScreenState extends State<ContactScreen> {
                   child: Row(
                     children: [
                       Icon(Icons.phone),
-                      SizedBox(height: 10),
-                      Text("Layanan Pelanggan\n123-4567-890"),
-                      Icon(Icons.arrow_right),
+                      SizedBox(width: 10),
+                      InkWell(
+                          child: Row(
+                        children: [
+                          Text("Layanan Pelanggan"),
+                          SizedBox(width: 10),
+                          Icon(Icons.arrow_right),
+                        ],
+                      )),
                     ],
                   ),
                 ),
@@ -94,9 +99,15 @@ class _ContactScreenState extends State<ContactScreen> {
                   child: Row(
                     children: [
                       Icon(Icons.chat),
-                      SizedBox(height: 10),
-                      Text("Whatsapp"),
-                      Icon(Icons.arrow_right),
+                      SizedBox(width: 10),
+                      InkWell(
+                          child: Row(
+                        children: [
+                          Text("Whatsapp"),
+                          SizedBox(width: 10),
+                          Icon(Icons.arrow_right),
+                        ],
+                      )),
                     ],
                   ),
                 ),
@@ -109,9 +120,15 @@ class _ContactScreenState extends State<ContactScreen> {
                   child: Row(
                     children: [
                       Icon(Icons.email),
-                      SizedBox(height: 10),
-                      Text("Email\ndarderdor"),
-                      Icon(Icons.arrow_right),
+                      SizedBox(width: 10),
+                      InkWell(
+                          child: Row(
+                        children: [
+                          Text("Email"),
+                          SizedBox(width: 10),
+                          Icon(Icons.arrow_right),
+                        ],
+                      )),
                     ],
                   ),
                 ),
@@ -124,16 +141,21 @@ class _ContactScreenState extends State<ContactScreen> {
                   child: Row(
                     children: [
                       Icon(Icons.web_stories),
-                      SizedBox(height: 10),
-                      Text("Website\nxxxx.id"),
-                      Icon(Icons.arrow_right),
+                      SizedBox(width: 10),
+                      InkWell(
+                          child: Row(
+                        children: [
+                          Text("Website"),
+                          SizedBox(width: 10),
+                          Icon(Icons.arrow_right),
+                        ],
+                      )),
                     ],
                   ),
                 ),
-            ],
+              ],
+            ),
           ),
-        ),
-      )
-    );
+        ));
   }
 }

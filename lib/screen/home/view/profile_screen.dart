@@ -8,6 +8,7 @@ import 'package:koperasimobile/constant/decoration_constant.dart';
 import 'package:koperasimobile/constant/text_constant.dart';
 import 'package:koperasimobile/screen/auth/login_screen.dart';
 import 'package:koperasimobile/screen/home/view/contact_screen.dart';
+import 'package:koperasimobile/screen/home/view/update_member_screen.dart';
 import 'package:koperasimobile/utils/local_data.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -232,7 +233,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ],
               ),
               SizedBox(height: 10),
-              itemMenu('Account Detail', Icons.person),
+              GestureDetector(
+                onTap: () => Get.to(() => UpdMemberScreen()),
+                child:  itemMenu('Account Detail', Icons.person),
+              ),
               itemMenu('Security', Icons.lock),
               GestureDetector(
                 onTap: () => Get.to(() => ContactScreen()),
