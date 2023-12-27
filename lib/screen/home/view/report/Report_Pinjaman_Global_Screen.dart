@@ -5,21 +5,21 @@ import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:flutter/services.dart';
 import 'package:printing/printing.dart';
-import '../../../api/api.dart';
-import '../../../constant/const_url.dart';
-import '../../../constant/dialog_constant.dart';
-import '../../../constant/image_constant.dart';
-import '../../../constant/utils_date.dart';
-import '../../../constant/utils_rp.dart';
-import '../../../widget/app_nodata.dart';
+import '../../../../api/api.dart';
+import '../../../../constant/const_url.dart';
+import '../../../../constant/dialog_constant.dart';
+import '../../../../constant/image_constant.dart';
+import '../../../../constant/utils_date.dart';
+import '../../../../constant/utils_rp.dart';
+import '../../../../widget/app_nodata.dart';
 
-class ReportScreen extends StatefulWidget {
+class ReportGlobalScreen extends StatefulWidget {
   final String ccustcode;
   final String branch;
   final String nama;
   final String nmlengkap;
 
-  ReportScreen({
+  ReportGlobalScreen({
     required this.ccustcode,
     required this.branch,
     required this.nama,
@@ -27,10 +27,10 @@ class ReportScreen extends StatefulWidget {
   });
 
   @override
-  State<ReportScreen> createState() => _ReportScreenState();
+  State<ReportGlobalScreen> createState() => _ReportGlobalScreenState();
 }
 
-class _ReportScreenState extends State<ReportScreen> {
+class _ReportGlobalScreenState extends State<ReportGlobalScreen> {
   late String ccustcode;
   late String cdocno;
   late String cnama;
@@ -62,7 +62,7 @@ class _ReportScreenState extends State<ReportScreen> {
         "nama": "${widget.nama}"
       };
       await API.basePostGolang(ConstUrl.cetakpinjaman, post, header, true,
-        (result, error) {
+            (result, error) {
           if (error != null) {
             Navigator.pop(context);
             print('Error fetching saldo inifais: $error');
@@ -120,7 +120,7 @@ class _ReportScreenState extends State<ReportScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Report Pinjaman',
+          'Report Pinjaman Global',
           style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
         ),
         actions: [
@@ -152,178 +152,178 @@ class _ReportScreenState extends State<ReportScreen> {
             child: Center(
               child: isFetch
                   ? Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Divider(
-                          height: 1,
-                          color: Colors.black,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Divider(
+                    height: 1,
+                    color: Colors.black,
+                  ),
+                  DataTable(
+                    columnSpacing: width / height * 15,
+                    horizontalMargin: 5.0,
+                    columns: [
+                      DataColumn(
+                        label: Container(
+                          width: width * 0.15,
+                          child: Center(child: Text('No. Dok')),
                         ),
-                        DataTable(
-                          columnSpacing: width / height * 15,
-                          horizontalMargin: 5.0,
-                          columns: [
-                            DataColumn(
-                              label: Container(
-                                width: width * 0.15,
-                                child: Center(child: Text('No. Dok')),
-                              ),
-                            ),
-                            DataColumn(
-                              label: Container(
-                                width: width * 0.15,
-                                child: Center(child: Text('Tgl Trans')),
-                              ),
-                            ),
-                            DataColumn(
-                              label: Container(
-                                width: width * 0.1,
-                                child: Center(child: Text('Netto')),
-                              ),
-                              numeric: true,
-                            ),
-                            DataColumn(
-                              label: Container(
-                                width: width * 0.1,
-                                child: Center(child: Text('Pay')),
-                              ),
-                              numeric: true,
-                            ),
-                            DataColumn(
-                              label: Container(
-                                width: width * 0.1,
-                                child: Center(child: Text('Sisa')),
-                              ),
-                              numeric: true,
-                            ),
-                          ],
-                          rows: [
-                            for (var i = 0; i < dataList.length; i++)
-                              DataRow(cells: [
-                                DataCell(
-                                  Align(
-                                    alignment: Alignment.centerRight,
-                                    child: Text(
-                                      dataList[i]['cdocno'],
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 12.0,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                DataCell(
-                                  Align(
-                                    alignment: Alignment.center,
-                                    child: Text(
-                                      UtilsDate.tanggalHariIni(
-                                          dataList[i]['tgltrans']),
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 12.0,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                DataCell(
-                                  Align(
-                                    alignment: Alignment.centerRight,
-                                    child: Text(
-                                      duet(dataList[i]['netto']),
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 12.0,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                DataCell(
-                                  Align(
-                                    alignment: Alignment.centerRight,
-                                    child: Text(
-                                      duet(dataList[i]['payment']),
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 12.0,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                DataCell(
-                                  Align(
-                                    alignment: Alignment.centerRight,
-                                    child: Text(
-                                      duet(dataList[i]['sisa']),
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 12.0,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ]),
-                            DataRow(cells: [
-                              DataCell(
-                                Align(
-                                  alignment: Alignment.centerRight,
-                                  child: Text(
-                                    'Subtotal',
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 12.0,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              DataCell(Container()),
-                              DataCell(
-                                Align(
-                                  alignment: Alignment.centerRight,
-                                  child: Text(
-                                    duet(totalNetto.toString()),
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 12.0,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              DataCell(
-                                Align(
-                                  alignment: Alignment.centerRight,
-                                  child: Text(
-                                    duet(totalPayment.toString()),
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 12.0,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              DataCell(
-                                Align(
-                                  alignment: Alignment.centerRight,
-                                  child: Text(
-                                    duet(totalSisa.toString()),
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 12.0,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ]),
-                          ],
+                      ),
+                      DataColumn(
+                        label: Container(
+                          width: width * 0.15,
+                          child: Center(child: Text('Tgl Trans')),
                         ),
-                        Divider(
-                          height: 1,
-                          color: Colors.black,
+                      ),
+                      DataColumn(
+                        label: Container(
+                          width: width * 0.1,
+                          child: Center(child: Text('Netto')),
                         ),
-                      ],
-                    )
+                        numeric: true,
+                      ),
+                      DataColumn(
+                        label: Container(
+                          width: width * 0.1,
+                          child: Center(child: Text('Pay')),
+                        ),
+                        numeric: true,
+                      ),
+                      DataColumn(
+                        label: Container(
+                          width: width * 0.1,
+                          child: Center(child: Text('Sisa')),
+                        ),
+                        numeric: true,
+                      ),
+                    ],
+                    rows: [
+                      for (var i = 0; i < dataList.length; i++)
+                        DataRow(cells: [
+                          DataCell(
+                            Align(
+                              alignment: Alignment.centerRight,
+                              child: Text(
+                                dataList[i]['cdocno'],
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 12.0,
+                                ),
+                              ),
+                            ),
+                          ),
+                          DataCell(
+                            Align(
+                              alignment: Alignment.center,
+                              child: Text(
+                                UtilsDate.tanggalHariIni(
+                                    dataList[i]['tgltrans']),
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 12.0,
+                                ),
+                              ),
+                            ),
+                          ),
+                          DataCell(
+                            Align(
+                              alignment: Alignment.centerRight,
+                              child: Text(
+                                duet(dataList[i]['netto']),
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 12.0,
+                                ),
+                              ),
+                            ),
+                          ),
+                          DataCell(
+                            Align(
+                              alignment: Alignment.centerRight,
+                              child: Text(
+                                duet(dataList[i]['payment']),
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 12.0,
+                                ),
+                              ),
+                            ),
+                          ),
+                          DataCell(
+                            Align(
+                              alignment: Alignment.centerRight,
+                              child: Text(
+                                duet(dataList[i]['sisa']),
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 12.0,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ]),
+                      DataRow(cells: [
+                        DataCell(
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: Text(
+                              'Subtotal',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 12.0,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                        DataCell(Container()),
+                        DataCell(
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: Text(
+                              duet(totalNetto.toString()),
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 12.0,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                        DataCell(
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: Text(
+                              duet(totalPayment.toString()),
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 12.0,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                        DataCell(
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: Text(
+                              duet(totalSisa.toString()),
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 12.0,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ]),
+                    ],
+                  ),
+                  Divider(
+                    height: 1,
+                    color: Colors.black,
+                  ),
+                ],
+              )
                   : AppNoData(ket: 'Tidak ada data'),
             ),
           ),
@@ -384,15 +384,15 @@ class _ReportScreenState extends State<ReportScreen> {
     var width = MediaQuery.of(context).size.width + 200;
     var height = MediaQuery.of(context).size.height;
     final Uint8List svgData =
-        (await rootBundle.load('assets/images/15-koperasi.png'))
-            .buffer
-            .asUint8List();
+    (await rootBundle.load('assets/images/15-koperasi.png'))
+        .buffer
+        .asUint8List();
     pdf.addPage(
       pw.Page(
         build: (context) {
           return pw.Stack(children: [
             pw.Container(
-                // color: PdfColors.red,
+              // color: PdfColors.red,
                 height: height,
                 width: width,
                 child: pw.Padding(

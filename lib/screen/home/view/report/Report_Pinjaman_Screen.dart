@@ -1,35 +1,36 @@
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:koperasimobile/widget/app_nodata.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:flutter/services.dart';
 import 'package:printing/printing.dart';
-import '../../../api/api.dart';
-import '../../../constant/const_url.dart';
-import '../../../constant/dialog_constant.dart';
-import '../../../constant/image_constant.dart';
-import '../../../constant/utils_date.dart';
-import '../../../constant/utils_rp.dart';
+import '../../../../api/api.dart';
+import '../../../../constant/const_url.dart';
+import '../../../../constant/dialog_constant.dart';
+import '../../../../constant/image_constant.dart';
+import '../../../../constant/utils_date.dart';
+import '../../../../constant/utils_rp.dart';
+import '../../../../widget/app_nodata.dart';
 
-class ReportSimpScreen extends StatefulWidget {
+class ReportScreen extends StatefulWidget {
   final String ccustcode;
   final String branch;
   final String nama;
   final String nmlengkap;
 
-  ReportSimpScreen(
-      {required this.ccustcode,
-      required this.branch,
-      required this.nama,
-      required this.nmlengkap});
+  ReportScreen({
+    required this.ccustcode,
+    required this.branch,
+    required this.nama,
+    required this.nmlengkap,
+  });
 
   @override
-  State<ReportSimpScreen> createState() => _ReportSimpScreenState();
+  State<ReportScreen> createState() => _ReportScreenState();
 }
 
-class _ReportSimpScreenState extends State<ReportSimpScreen> {
+class _ReportScreenState extends State<ReportScreen> {
   late String ccustcode;
   late String cdocno;
   late String cnama;
@@ -60,11 +61,7 @@ class _ReportSimpScreenState extends State<ReportSimpScreen> {
         "branch": "${widget.branch}",
         "nama": "${widget.nama}"
       };
-      await API.basePostGolang(
-        ConstUrl.cetaksimpanan,
-        post,
-        header,
-        true,
+      await API.basePostGolang(ConstUrl.cetakpinjaman, post, header, true,
         (result, error) {
           if (error != null) {
             Navigator.pop(context);
@@ -117,19 +114,21 @@ class _ReportSimpScreenState extends State<ReportSimpScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
     var width = MediaQuery.of(context).size.width;
     var height = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Report Simpanan',
-          style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+          'Report Pinjaman Detail',
+          style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
         ),
         actions: [
           IconButton(
             icon: Icon(Icons.picture_as_pdf_rounded, color: Colors.green),
             onPressed: () {
               _printPDF(context);
+              // print('fais klik');
             },
           ),
         ],
@@ -348,7 +347,7 @@ class _ReportSimpScreenState extends State<ReportSimpScreen> {
               ),
             ),
             content: Text("Tidak ada data untuk dicetak.",style: TextStyle(
-          fontSize: 15,)),
+              fontSize: 15,)),
             contentPadding: EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 0.0),
             actions: [
               Container(
@@ -364,13 +363,13 @@ class _ReportSimpScreenState extends State<ReportSimpScreen> {
                       },
                       child: Center(
                           child: Text(
-                        "OK",
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.blue,
-                        ),
-                      )),
+                            "OK",
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.blue,
+                            ),
+                          )),
                     ),
                   ],
                 ),
@@ -440,7 +439,7 @@ class _ReportSimpScreenState extends State<ReportSimpScreen> {
               child: pw.Column(
                 mainAxisAlignment: pw.MainAxisAlignment.start,
                 children: [
-                  pw.Text('** Report Simpanan **',
+                  pw.Text('** Report Pinjaman **',
                       style: pw.TextStyle(
                         fontWeight: pw.FontWeight.bold,
                       )),

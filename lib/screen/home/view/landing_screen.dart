@@ -8,8 +8,10 @@ import 'package:koperasimobile/constant/colors_icon.dart';
 import 'package:koperasimobile/constant/text_constant.dart';
 import 'package:koperasimobile/constant/utils_rp.dart';
 import 'package:koperasimobile/model/model_landingpage.dart';
-import 'package:koperasimobile/screen/home/view/Report_Pinjaman_Screen.dart';
-import 'package:koperasimobile/screen/home/view/Report_Simpanan_Screen.dart';
+import 'package:koperasimobile/screen/home/view/report/Report_Pinjaman_Global_Screen.dart';
+import 'package:koperasimobile/screen/home/view/report/Report_Pinjaman_Screen.dart';
+import 'package:koperasimobile/screen/home/view/report/Report_Simpanan_Global_Screen.dart';
+import 'package:koperasimobile/screen/home/view/report/Report_Simpanan_Screen.dart';
 import 'package:koperasimobile/screen/home/view/sub_menu_saldo.dart';
 import 'package:koperasimobile/widget/app_shimmer.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
@@ -129,8 +131,8 @@ class _LandingScreenState extends State<LandingScreen> {
       }
     }
 
-    var size   = MediaQuery.of(context).size;
-    var width  = MediaQuery.of(context).size.width;
+    var size = MediaQuery.of(context).size;
+    var width = MediaQuery.of(context).size.width;
     var height = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
@@ -385,13 +387,123 @@ class _LandingScreenState extends State<LandingScreen> {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceEvenly,
                                   children: [
+                                    // InkWell(
+                                    //   onTap: () async {
+                                    //     SharedPreferences prefs =
+                                    //         await SharedPreferences
+                                    //             .getInstance();
+                                    //     var custcode =
+                                    //         prefs.getString('cmember');
+                                    //     var branch = prefs.getString('cbranch');
+                                    //     var nama = prefs
+                                    //         .getString('user')
+                                    //         ?.substring(0, 4);
+                                    //     var nmlgkp = prefs.getString('user');
+                                    //
+                                    //     showDialog(
+                                    //       context: context,
+                                    //       builder: (BuildContext context) {
+                                    //         return AlertDialog(
+                                    //           title: Text('Pilih Jenis Laporan',
+                                    //               style: TextStyle(
+                                    //                   fontSize: 18,
+                                    //                   fontWeight:
+                                    //                       FontWeight.bold)),
+                                    //           content: Column(
+                                    //             mainAxisSize: MainAxisSize.min,
+                                    //             children: [
+                                    //               ListTile(
+                                    //                 title: Text('Report Detail',
+                                    //                     style: TextStyle(
+                                    //                         fontSize: 13,
+                                    //                         fontWeight:
+                                    //                             FontWeight
+                                    //                                 .bold)),
+                                    //                 onTap: () {
+                                    //                   Navigator.pop(context);
+                                    //                   Navigator.push(
+                                    //                     context,
+                                    //                     MaterialPageRoute(
+                                    //                       builder: (context) =>
+                                    //                           ReportScreen(
+                                    //                         ccustcode: custcode
+                                    //                             .toString(),
+                                    //                         branch: branch
+                                    //                             .toString(),
+                                    //                         nama:
+                                    //                             nama.toString(),
+                                    //                         nmlengkap: nmlgkp
+                                    //                             .toString(),
+                                    //                       ),
+                                    //                     ),
+                                    //                   );
+                                    //                 },
+                                    //               ),
+                                    //               ListTile(
+                                    //                 title: Text('Report Global',
+                                    //                     style: TextStyle(
+                                    //                         fontSize: 13,
+                                    //                         fontWeight:
+                                    //                             FontWeight
+                                    //                                 .bold)),
+                                    //                 onTap: () {
+                                    //                   Navigator.pop(context);
+                                    //                   Navigator.push(
+                                    //                     context,
+                                    //                     MaterialPageRoute(
+                                    //                       builder: (context) =>
+                                    //                           ReportGlobalScreen(
+                                    //                         ccustcode: custcode
+                                    //                             .toString(),
+                                    //                         branch: branch
+                                    //                             .toString(),
+                                    //                         nama:
+                                    //                             nama.toString(),
+                                    //                         nmlengkap: nmlgkp
+                                    //                             .toString(),
+                                    //                       ),
+                                    //                     ),
+                                    //                   );
+                                    //                 },
+                                    //               ),
+                                    //             ],
+                                    //           ),
+                                    //         );
+                                    //       },
+                                    //     );
+                                    //   },
+                                    //   child: Container(
+                                    //     padding: EdgeInsets.all(10),
+                                    //     child: Column(
+                                    //       children: [
+                                    //         Text(
+                                    //           'Saldo Pinjaman ',
+                                    //           style: TextStyle(
+                                    //             color: Colors.black,
+                                    //             fontSize: 12.0,
+                                    //           ),
+                                    //         ),
+                                    //         isLoading == false
+                                    //             ? Text(
+                                    //                 'Rp. ${duet(pinjamanString!)}',
+                                    //                 style: TextStyle(
+                                    //                   color: Colors.black,
+                                    //                   fontSize: 15.0,
+                                    //                 ),
+                                    //               )
+                                    //             : AppShimmer(
+                                    //                 width: width * 0.25)
+                                    //       ],
+                                    //     ),
+                                    //   ),
+                                    // ),
                                     InkWell(
                                       onTap: () async {
                                         SharedPreferences prefs =
-                                            await SharedPreferences
-                                                .getInstance();
+                                        await SharedPreferences
+                                            .getInstance();
                                         var custcode =
-                                            prefs.getString('cmember');
+                                        prefs.getString('cmember');
                                         var branch = prefs.getString('cbranch');
                                         var nama = prefs
                                             .getString('user')
@@ -422,14 +534,14 @@ class _LandingScreenState extends State<LandingScreen> {
                                             ),
                                             isLoading == false
                                                 ? Text(
-                                                    'Rp. ${duet(pinjamanString!)}',
-                                                    style: TextStyle(
-                                                      color: Colors.black,
-                                                      fontSize: 15.0,
-                                                    ),
-                                                  )
+                                              'Rp. ${duet(pinjamanString!)}',
+                                              style: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 15.0,
+                                              ),
+                                            )
                                                 : AppShimmer(
-                                                    width: width * 0.25)
+                                                width: width * 0.25)
                                           ],
                                         ),
                                       ),
@@ -439,13 +551,123 @@ class _LandingScreenState extends State<LandingScreen> {
                                       width: 2,
                                       color: Colors.grey,
                                     ),
+                                    // InkWell(
+                                    //   onTap: () async {
+                                    //     SharedPreferences prefs =
+                                    //         await SharedPreferences
+                                    //             .getInstance();
+                                    //     var custcode =
+                                    //         prefs.getString('cmember');
+                                    //     var branch = prefs.getString('cbranch');
+                                    //     var nama = prefs
+                                    //         .getString('user')
+                                    //         ?.substring(0, 4);
+                                    //     var nmlgkp = prefs.getString('user');
+                                    //
+                                    //     showDialog(
+                                    //       context: context,
+                                    //       builder: (BuildContext context) {
+                                    //         return AlertDialog(
+                                    //           title: Text('Pilih Jenis Laporan',
+                                    //               style: TextStyle(
+                                    //                   fontSize: 18,
+                                    //                   fontWeight:
+                                    //                   FontWeight.bold)),
+                                    //           content: Column(
+                                    //             mainAxisSize: MainAxisSize.min,
+                                    //             children: [
+                                    //               ListTile(
+                                    //                 title: Text('Report Detail',
+                                    //                     style: TextStyle(
+                                    //                         fontSize: 13,
+                                    //                         fontWeight:
+                                    //                         FontWeight
+                                    //                             .bold)),
+                                    //                 onTap: () {
+                                    //                   Navigator.pop(context);
+                                    //                   Navigator.push(
+                                    //                     context,
+                                    //                     MaterialPageRoute(
+                                    //                       builder: (context) =>
+                                    //                           ReportSimpScreen(
+                                    //                             ccustcode: custcode
+                                    //                                 .toString(),
+                                    //                             branch: branch
+                                    //                                 .toString(),
+                                    //                             nama:
+                                    //                             nama.toString(),
+                                    //                             nmlengkap: nmlgkp
+                                    //                                 .toString(),
+                                    //                           ),
+                                    //                     ),
+                                    //                   );
+                                    //                 },
+                                    //               ),
+                                    //               ListTile(
+                                    //                 title: Text('Report Global',
+                                    //                     style: TextStyle(
+                                    //                         fontSize: 13,
+                                    //                         fontWeight:
+                                    //                         FontWeight
+                                    //                             .bold)),
+                                    //                 onTap: () {
+                                    //                   Navigator.pop(context);
+                                    //                   Navigator.push(
+                                    //                     context,
+                                    //                     MaterialPageRoute(
+                                    //                       builder: (context) =>
+                                    //                           ReportSimpGlobalScreen(
+                                    //                             ccustcode: custcode
+                                    //                                 .toString(),
+                                    //                             branch: branch
+                                    //                                 .toString(),
+                                    //                             nama:
+                                    //                             nama.toString(),
+                                    //                             nmlengkap: nmlgkp
+                                    //                                 .toString(),
+                                    //                           ),
+                                    //                     ),
+                                    //                   );
+                                    //                 },
+                                    //               ),
+                                    //             ],
+                                    //           ),
+                                    //         );
+                                    //       },
+                                    //     );
+                                    //   },
+                                    //   child: Container(
+                                    //     padding: EdgeInsets.all(10),
+                                    //     child: Column(
+                                    //       children: [
+                                    //         Text(
+                                    //           'Saldo Simpanan',
+                                    //           style: TextStyle(
+                                    //             color: Colors.black,
+                                    //             fontSize: 12.0,
+                                    //           ),
+                                    //         ),
+                                    //         isLoading == false
+                                    //             ? Text(
+                                    //                 'Rp. ${duet(simpananString!)}',
+                                    //                 style: TextStyle(
+                                    //                   color: Colors.black,
+                                    //                   fontSize: 15.0,
+                                    //                 ),
+                                    //               )
+                                    //             : AppShimmer(
+                                    //                 width: width * 0.25),
+                                    //       ],
+                                    //     ),
+                                    //   ),
+                                    // ),
                                     InkWell(
                                       onTap: () async {
                                         SharedPreferences prefs =
-                                            await SharedPreferences
-                                                .getInstance();
+                                        await SharedPreferences
+                                            .getInstance();
                                         var custcode =
-                                            prefs.getString('cmember');
+                                        prefs.getString('cmember');
                                         var branch = prefs.getString('cbranch');
                                         var nama = prefs
                                             .getString('user')
@@ -454,14 +676,12 @@ class _LandingScreenState extends State<LandingScreen> {
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                            builder: (context) =>
-                                                ReportSimpScreen(
-                                                    ccustcode:
-                                                        custcode.toString(),
-                                                    branch: branch.toString(),
-                                                    nama: nama.toString(),
-                                                    nmlengkap:
-                                                        nmlgkp.toString()),
+                                            builder: (context) => ReportSimpScreen(
+                                              ccustcode: custcode.toString(),
+                                              branch: branch.toString(),
+                                              nama: nama.toString(),
+                                              nmlengkap: nmlgkp.toString(),
+                                            ),
                                           ),
                                         );
                                       },
@@ -470,7 +690,7 @@ class _LandingScreenState extends State<LandingScreen> {
                                         child: Column(
                                           children: [
                                             Text(
-                                              'Saldo Simpanan',
+                                              'Saldo Simpanan ',
                                               style: TextStyle(
                                                 color: Colors.black,
                                                 fontSize: 12.0,
@@ -478,14 +698,14 @@ class _LandingScreenState extends State<LandingScreen> {
                                             ),
                                             isLoading == false
                                                 ? Text(
-                                                    'Rp. ${duet(simpananString!)}',
-                                                    style: TextStyle(
-                                                      color: Colors.black,
-                                                      fontSize: 15.0,
-                                                    ),
-                                                  )
+                                              'Rp. ${duet(simpananString!)}',
+                                              style: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 15.0,
+                                              ),
+                                            )
                                                 : AppShimmer(
-                                                    width: width * 0.25),
+                                                width: width * 0.25)
                                           ],
                                         ),
                                       ),

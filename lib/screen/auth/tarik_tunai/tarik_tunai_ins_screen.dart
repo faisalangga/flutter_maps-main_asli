@@ -178,7 +178,7 @@ class _TartunScreenState extends State<TarikTunaiInsScreen> {
   }
 
   bool isExpanded = false;
-  bool showUpdateButton = true;
+  // bool showUpdateButton = false;
 
   bool _showUpdateButton() {
     return '$nabank' == '-' ||
@@ -192,6 +192,7 @@ class _TartunScreenState extends State<TarikTunaiInsScreen> {
     var width = MediaQuery.of(context).size.width;
     var size = MediaQuery.of(context).size;
     var height = MediaQuery.of(context).size.height;
+    // print('fais showUpdateButton:$showUpdateButton');
     double saldosimp = saldosimpString != null
         ? double.tryParse(saldosimpString!) ?? 0.0
         : 0.0;
@@ -344,30 +345,30 @@ class _TartunScreenState extends State<TarikTunaiInsScreen> {
                               : null,
                         ),
                       ),
-                      Container(
-                        height: 15,
-                        child: Visibility(
-                          visible: showUpdateButton,
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              SizedBox(height: 5,),
-                              Text(
-                                'Lengkapi Data Bank dan Nomor Rekening Anda  ',
-                                style: TextStyle(
-                                  color: Colors.redAccent,
-                                  fontSize: size.height * 0.015,
-                                ),
-                              ),
-                              Icon(
-                                Icons.info_outline,
-                                color: Colors.red,
-                                size: height*0.020,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
+                      // Container(
+                      //   height: 15,
+                      //   child: Visibility(
+                      //     visible: showUpdateButton,
+                      //     child: Row(
+                      //       crossAxisAlignment: CrossAxisAlignment.start,
+                      //       children: [
+                      //         SizedBox(height: 5,),
+                      //         Text(
+                      //           'Lengkapi Data Bank dan Nomor Rekening Anda  ',
+                      //           style: TextStyle(
+                      //             color: Colors.redAccent,
+                      //             fontSize: size.height * 0.015,
+                      //           ),
+                      //         ),
+                      //         Icon(
+                      //           Icons.info_outline,
+                      //           color: Colors.red,
+                      //           size: height*0.020,
+                      //         ),
+                      //       ],
+                      //     ),
+                      //   ),
+                      // ),
                     ],
                   ),
                 ),
