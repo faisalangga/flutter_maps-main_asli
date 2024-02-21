@@ -121,7 +121,6 @@ class _LandingScreenState extends State<LandingScreen> {
           setState(() {
             simpananString = saldosimpString ?? '0';
             pinjamanString = saldopnjString ?? '0';
-
             // print('fais saldos : $simpananString');
             // print('fais saldop : $pinjamanString');
           });

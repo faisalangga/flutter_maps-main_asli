@@ -38,6 +38,7 @@ class _ReportScreenState extends State<ReportScreen> {
   late String payment;
   late String sisa;
   late String tgltrans;
+  late String tenor;
   double totalNetto = 0.0;
   double totalPayment = 0.0;
   double totalSisa = 0.0;
@@ -75,6 +76,9 @@ class _ReportScreenState extends State<ReportScreen> {
                   setState(() {
                     isFetch = true;
                     dataList = List.from(result['data']); // Update dataList
+                    print('fais dataList ${dataList.length}');
+                    print('fais tenor ${dataList[0]['tenor']}');
+                    print('fais tenor ${dataList[1]['tenor']}');
                     for (int i = 0; i < dataList.length; i++) {
                       final item = dataList[i];
                       ccustcode = item['ccustcode'];
@@ -84,11 +88,12 @@ class _ReportScreenState extends State<ReportScreen> {
                       payment = item['payment'];
                       sisa = item['sisa'];
                       tgltrans = item['tgltrans'];
+                      // tenor = item['tenor'];
 
                       // Menghitung subtotal
                       totalNetto += double.parse(netto);
                       totalPayment += double.parse(payment);
-                      totalSisa += double.parse(sisa);
+                      // totalSisa += double.parse(sisa);
                     }
                   });
                 } else {
@@ -121,7 +126,7 @@ class _ReportScreenState extends State<ReportScreen> {
       appBar: AppBar(
         title: Text(
           'Report Pinjaman Detail',
-          style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
         ),
         actions: [
           IconButton(
@@ -154,12 +159,21 @@ class _ReportScreenState extends State<ReportScreen> {
                   ? Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
+                        Column(
+                          children: [
+                            Text('${widget.ccustcode}',style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 12.0,
+                              ),
+                            ),
+                          ],
+                        ),
                         Divider(
                           height: 1,
                           color: Colors.black,
                         ),
                         DataTable(
-                          columnSpacing: width / height * 15,
+                          columnSpacing: width / height * 20,
                           horizontalMargin: 5.0,
                           columns: [
                             DataColumn(
@@ -172,6 +186,12 @@ class _ReportScreenState extends State<ReportScreen> {
                               label: Container(
                                 width: width * 0.15,
                                 child: Center(child: Text('Tgl Trans')),
+                              ),
+                            ),
+                            DataColumn(
+                              label: Container(
+                                width: width * 0.15,
+                                child: Center(child: Text('Tenor Ke-')),
                               ),
                             ),
                             DataColumn(
@@ -206,7 +226,7 @@ class _ReportScreenState extends State<ReportScreen> {
                                       dataList[i]['cdocno'],
                                       style: TextStyle(
                                         color: Colors.black,
-                                        fontSize: 12.0,
+                                        fontSize: 10.0,
                                       ),
                                     ),
                                   ),
@@ -219,7 +239,18 @@ class _ReportScreenState extends State<ReportScreen> {
                                           dataList[i]['tgltrans']),
                                       style: TextStyle(
                                         color: Colors.black,
-                                        fontSize: 12.0,
+                                        fontSize: 10.0,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                DataCell(
+                                  Align(
+                                    alignment: Alignment.center,
+                                    child: Text(dataList[i]['tenor'] == '0' ? '-':dataList[i]['tenor'],
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 10.0,
                                       ),
                                     ),
                                   ),
@@ -231,7 +262,7 @@ class _ReportScreenState extends State<ReportScreen> {
                                       duet(dataList[i]['netto']),
                                       style: TextStyle(
                                         color: Colors.black,
-                                        fontSize: 12.0,
+                                        fontSize: 10.0,
                                       ),
                                     ),
                                   ),
@@ -243,7 +274,7 @@ class _ReportScreenState extends State<ReportScreen> {
                                       duet(dataList[i]['payment']),
                                       style: TextStyle(
                                         color: Colors.black,
-                                        fontSize: 12.0,
+                                        fontSize: 10.0,
                                       ),
                                     ),
                                   ),
@@ -255,7 +286,7 @@ class _ReportScreenState extends State<ReportScreen> {
                                       duet(dataList[i]['sisa']),
                                       style: TextStyle(
                                         color: Colors.black,
-                                        fontSize: 12.0,
+                                        fontSize: 10.0,
                                       ),
                                     ),
                                   ),
@@ -269,12 +300,13 @@ class _ReportScreenState extends State<ReportScreen> {
                                     'Subtotal',
                                     style: TextStyle(
                                       color: Colors.black,
-                                      fontSize: 12.0,
+                                      fontSize: 10.0,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
                                 ),
                               ),
+                              DataCell(Container()),
                               DataCell(Container()),
                               DataCell(
                                 Align(
@@ -283,7 +315,7 @@ class _ReportScreenState extends State<ReportScreen> {
                                     duet(totalNetto.toString()),
                                     style: TextStyle(
                                       color: Colors.black,
-                                      fontSize: 12.0,
+                                      fontSize: 10.0,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
@@ -296,7 +328,7 @@ class _ReportScreenState extends State<ReportScreen> {
                                     duet(totalPayment.toString()),
                                     style: TextStyle(
                                       color: Colors.black,
-                                      fontSize: 12.0,
+                                      fontSize: 10.0,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
@@ -306,10 +338,10 @@ class _ReportScreenState extends State<ReportScreen> {
                                 Align(
                                   alignment: Alignment.centerRight,
                                   child: Text(
-                                    duet(totalSisa.toString()),
+                                    duet(sisa.toString()),
                                     style: TextStyle(
                                       color: Colors.black,
-                                      fontSize: 12.0,
+                                      fontSize: 10.0,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
@@ -458,6 +490,7 @@ class _ReportScreenState extends State<ReportScreen> {
                         children: [
                           pw.Center(child: pw.Text('No. Dokumen')),
                           pw.Center(child: pw.Text('Tgl Trans')),
+                          pw.Center(child: pw.Text('Tenor ke-')),
                           pw.Center(child: pw.Text('Netto')),
                           pw.Center(child: pw.Text('Pay')),
                           pw.Center(child: pw.Text('Sisa')),
@@ -480,6 +513,15 @@ class _ReportScreenState extends State<ReportScreen> {
                                 UtilsDate.tanggalHariIni(
                                   dataList[i]['tgltrans'],
                                 ),
+                                style: pw.TextStyle(
+                                  color: PdfColor.fromInt(Colors.black.value),
+                                  fontSize: 12.0,
+                                ),
+                              ),
+                            ),
+                            pw.Center(
+                              child: pw.Text(
+                                '1',
                                 style: pw.TextStyle(
                                   color: PdfColor.fromInt(Colors.black.value),
                                   fontSize: 12.0,
