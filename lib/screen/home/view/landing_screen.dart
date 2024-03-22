@@ -82,8 +82,6 @@ class _LandingScreenState extends State<LandingScreen> {
               LandingpageModel response = LandingpageModel.fromJson(result);
               saldopnjString = response.data![0].saldopinj!;
               saldosimpString = response.data![0].saldosimp!;
-              // print(' fais bawah saldopnjString ${saldopnjString}');
-              // print(' fais bawah saldosimpString ${saldosimpString}');
             } catch (e) {
               print('$e');
             }
