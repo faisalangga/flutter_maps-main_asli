@@ -1,9 +1,9 @@
 import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:koperasimobile/constant/const_url.dart';
-
 // import 'package:koperasimobile/constant/dialog_constant.dart';
 import 'package:koperasimobile/constant/utils_rp.dart';
 import 'package:koperasimobile/model/model_search_pinjaman.dart';
@@ -69,6 +69,7 @@ class Data1 {
   String? pinjaman;
   String? tenor;
   String? tgl;
+  String? duedate;
 
   Data1(
       {this.angsuran,
@@ -89,7 +90,8 @@ class Data1 {
       this.nJasaPinjaman,
       this.pinjaman,
       this.tenor,
-      this.tgl});
+      this.tgl,
+      this.duedate});
 
   factory Data1.fromJson(Map<String, dynamic> json) {
     return Data1(
@@ -104,6 +106,7 @@ class Data1 {
       mValue1: json["mValue1"],
       mSisa1: json["mSisa1"],
       tgl: json["tgl"],
+      duedate: json["duedate"],
     );
   }
 }
@@ -156,6 +159,7 @@ class _PinjamanGridWidgetState extends State<PinjamanGridWidget> {
         if (datanya.data != null && datanya.data!.isNotEmpty) {
           setState(() {
             inidatas = datanya.data!;
+            // print('fais initdata ${inidatas.firstOrNull!.duedate}');
           });
         } else {
           // Navigator.pop(context);
@@ -170,6 +174,7 @@ class _PinjamanGridWidgetState extends State<PinjamanGridWidget> {
       print(' faisError: $error');
     }
   }
+
   // Future<List<DataView>> fetchPinjamans() async {
   //   SharedPreferences preferences = await SharedPreferences.getInstance();
   //   var cuser = preferences.getString("cmember");
@@ -215,7 +220,7 @@ class _PinjamanGridWidgetState extends State<PinjamanGridWidget> {
   @override
   Widget build(BuildContext context) {
     bool isPendingApproval =
-        inidatas.any((pinjaman) => pinjaman.cStatus != '3');
+        !inidatas.any((pinjaman) => pinjaman.cStatus == 'F');
     return Scaffold(
       appBar: AppBar(
         title: _searchMode
@@ -315,7 +320,7 @@ class _PinjamanGridWidgetState extends State<PinjamanGridWidget> {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           // bool isPendingApproval =
-          //     !inidatas.any((pinjaman) => pinjaman.cStatus == '3');
+          // !inidatas.any((pinjaman) => pinjaman.cStatus == '3');
           if (isPendingApproval) {
             showDialog(
               context: context,
@@ -323,7 +328,7 @@ class _PinjamanGridWidgetState extends State<PinjamanGridWidget> {
                 return AlertDialog(
                   title: Text('Peringatan'),
                   content: Text(
-                    'Tidak dapat membuat pinjaman baru, Ada pinjaman belum Approve Final.',
+                    'Tidak dapat membuat pinjaman baru, Ada pinjaman yang belum Lunas.',
                     textAlign: TextAlign.center,
                   ),
                   actions: <Widget>[
@@ -383,23 +388,24 @@ class _PinjamanGridWidgetState extends State<PinjamanGridWidget> {
       child: Padding(
         padding: EdgeInsets.fromLTRB(3.0, 3.0, 3.0, 0.0),
         child: Card(
-          elevation: 2,
+          elevation: 4,
           child: Container(
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5.0),
+              borderRadius: BorderRadius.circular(10.0),
               border: Border.all(
                 color: Colors.black,
-                width: 0.5,
+                width: 0.9,
               ),
             ),
             child: ListTile(
+              tileColor: Colors.white,
               leading: CircleAvatar(
                 backgroundImage: AssetImage(
-                  pinjaman.cStatus != '0'
+                  pinjaman.cStatus == 'F'
                       ? "assets/images/checklist.png"
                       : "assets/images/rejected.png",
                 ),
-                backgroundColor: pinjaman.cStatus != '0'
+                backgroundColor: pinjaman.cStatus == 'F'
                     ? Colors.green.shade200
                     : Colors.lightBlue.shade100,
                 radius: 20,
@@ -424,56 +430,70 @@ class _PinjamanGridWidgetState extends State<PinjamanGridWidget> {
                       ),
                     ),
                   ),
-                  pinjaman.cStatus == '0'
-                      ? IconButton(
-                          icon: Stack(
-                            children: <Widget>[
-                              Center(
-                                child: Icon(
-                                  Icons.delete_forever_sharp,
-                                  color: Colors.redAccent.shade400,
-                                  size: 30,
-                                ),
-                              ),
-                            ],
-                          ),
-                          onPressed: () {
-                            // Logika penghapusan di sini
-                            // Contoh: fungsiHapusItem(product);
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  title: Text(
-                                    'Tidak Bisa Hapus',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 15,
-                                      color: Colors.black87,
-                                    ),
-                                  ),
-                                  // content: Text('Pesan atau alasan mengapa item ini tidak dapat dihapus.'),
-                                  actions: <Widget>[
-                                    TextButton(
-                                      child: Text('Tutup'),
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                    ),
-                                  ],
-                                );
-                              },
-                            );
-                          },
-                        )
-                      : SizedBox(height: 40),
+                  // pinjaman.cStatus == '0'
+                  //     ? IconButton(
+                  //         icon: Stack(
+                  //           children: <Widget>[
+                  //             Center(
+                  //               child: Icon(
+                  //                 Icons.delete_forever_sharp,
+                  //                 color: Colors.redAccent.shade400,
+                  //                 size: 30,
+                  //               ),
+                  //             ),
+                  //           ],
+                  //         ),
+                  //         onPressed: () {
+                  //           // Logika penghapusan di sini
+                  //           // Contoh: fungsiHapusItem(product);
+                  //           showDialog(
+                  //             context: context,
+                  //             builder: (BuildContext context) {
+                  //               return AlertDialog(
+                  //                 title: Text(
+                  //                   'Tidak Bisa Hapus',
+                  //                   style: TextStyle(
+                  //                     fontWeight: FontWeight.bold,
+                  //                     fontSize: 15,
+                  //                     color: Colors.black87,
+                  //                   ),
+                  //                 ),
+                  //                 // content: Text('Pesan atau alasan mengapa item ini tidak dapat dihapus.'),
+                  //                 actions: <Widget>[
+                  //                   TextButton(
+                  //                     child: Text('Tutup'),
+                  //                     onPressed: () {
+                  //                       Navigator.of(context).pop();
+                  //                     },
+                  //                   ),
+                  //                 ],
+                  //               );
+                  //             },
+                  //           );
+                  //         },
+                  //       )
+                  //     :
+                  //         Column(
+                  //           children: [
+                  //             CircleAvatar(
+                  //               backgroundColor: Colors.transparent,
+                  //               child: pinjaman.cStatus == 'F'
+                  //                   ? Image.asset(
+                  //                 "assets/images/lunas.png",
+                  //                 width: 40,
+                  //                 height: 40,
+                  //                 color: Colors.red,
+                  //               )
+                  //                   : SizedBox(height: 40),
+                  //             ),
+                  //           ],
+                  //         ),
                 ],
               ),
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Container(
                         decoration: BoxDecoration(
@@ -524,6 +544,54 @@ class _PinjamanGridWidgetState extends State<PinjamanGridWidget> {
                   ),
                 ],
               ),
+              trailing: pinjaman.cStatus == '0'
+                  ? IconButton(
+                      icon: Stack(
+                        children: <Widget>[
+                          Center(
+                            child: Icon(
+                              Icons.delete_forever_sharp,
+                              color: Colors.redAccent.shade400,
+                              size: 30,
+                            ),
+                          ),
+                        ],
+                      ),
+                      onPressed: () {
+                        // Logika penghapusan di sini
+                        // Contoh: fungsiHapusItem(product);
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: Text(
+                                'Tidak Bisa Hapus',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15,
+                                  color: Colors.black87,
+                                ),
+                              ),
+                              // content: Text('Pesan atau alasan mengapa item ini tidak dapat dihapus.'),
+                              actions: <Widget>[
+                                TextButton(
+                                  child: Text('Tutup'),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
+                    )
+                  : pinjaman.cStatus == 'F'
+                      ? Image.asset(
+                          "assets/images/lunas.jpg",
+                          width: 60,
+                        )
+                      : SizedBox(height: 40),
             ),
           ),
         ),

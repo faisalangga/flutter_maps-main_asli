@@ -6,9 +6,9 @@ class UtilsDate {
     return DateFormat(format).format(DateTime.now());
   }
 
-  String rupiah(String amount) {
-    final formatter = NumberFormat("#,###,##0");
-    return 'Rp' + formatter.format(double.parse(amount));
-  }
+  // String rupiah(String amount) {
+  //   final formatter = NumberFormat("#,###,##0");
+  //   return 'Rp' + formatter.format(double.parse(amount));
+  // }
 
 }

@@ -44,6 +44,7 @@ class DataView {
   String? pinjaman;
   String? tenor;
   String? tgl;
+  String? duedate;
 
   DataView(
       {this.angsuran,
@@ -64,7 +65,7 @@ class DataView {
       this.nJasaPinjaman,
       this.pinjaman,
       this.tenor,
-      this.tgl});
+      this.tgl, this.duedate});
 
   DataView.fromJson(Map<String, dynamic> json) {
     angsuran = json["angsuran"];
@@ -86,6 +87,7 @@ class DataView {
     pinjaman = json["pinjaman"];
     tenor = json["tenor"];
     tgl = json["tgl"];
+    duedate = json["duedate"];
   }
 
   Map<String, dynamic> toJson() {
@@ -109,6 +111,7 @@ class DataView {
     _data["pinjaman"] = pinjaman;
     _data["tenor"] = tenor;
     _data["tgl"] = tgl;
+    _data["duedate"] = duedate;
     return _data;
   }
 }

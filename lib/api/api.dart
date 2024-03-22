@@ -30,7 +30,7 @@ class API{
           //   recallback(null, mapError);
           // }
       );
-      print(response);
+      // print(response);
       if(response != null){
         int responseCode = response.statusCode;
         var sdad = response.body;
@@ -70,9 +70,9 @@ class API{
       bool encode,
       void callback(dynamic, Exception)) async {
 
-    print("URL ${url}");
-    print("POST Header ${json.encode(headers)}");
-    print("POST VALUE ${json.encode(post)}");
+    // print("URL ${url}");
+    // print("POST Header ${json.encode(headers)}");
+    // print("POST VALUE ${json.encode(post)}");
 
     var mapError = new Map();
     try{
@@ -89,7 +89,7 @@ class API{
       if(response != null){
         int responseCode = response.statusCode;
         var mapJson = json.decode(response.body);
-        print("POST RESULT ${json.encode(mapJson)}");
+        // print("POST RESULT ${json.encode(mapJson)}");
         if (mapJson['code'] == 200) {
           callback(mapJson, null);
         } else if (responseCode == 401 ||

@@ -1,8 +1,8 @@
 class ConstUrl {
   //ip
-  // static String BASE_URL_GOLANG = 'http://172.27.71.17:5000/koperasi';
-  // static String BASE_URL_GOLANG = 'http://suksesprimasejahtera.com:5000/koperasi';
-  static String BASE_URL_GOLANG = 'http://192.168.100.13:5000/koperasi';
+  // static String BASE_URL_GOLANG = 'http://172.27.71.16:5000/koperasi';
+  static String BASE_URL_GOLANG = 'http://suksesprimasejahtera.com:5000/koperasi';
+  // static String BASE_URL_GOLANG = 'http://192.168.100.13:5000/koperasi';
   static String BASE_URL= 'http://192.168.100.206/tokool';
 
   //module
@@ -33,8 +33,9 @@ class ConstUrl {
   static String insertTTunai    = "/insertTarikTunai";
   static String cetakpinjaman   = "/cetakrptpinjaman";
   static String cetaksimpanan   = "/cetakrptsimpanan";
-  static String BASE_URL_VIEW_PINJAMAN = "http://192.168.100.13:5000/koperasi/cekviewpinjaman";
-  // static String BASE_URL_VIEW_PINJAMAN = "http://suksesprimasejahtera.com:5000/koperasi/cekviewpinjaman";
+  // static String BASE_URL_VIEW_PINJAMAN = "http://172.27.71.16:5000/koperasi/cekviewpinjaman";
+  // static String BASE_URL_VIEW_PINJAMAN = "http://192.168.100.13:5000/koperasi/cekviewpinjaman";
+  static String BASE_URL_VIEW_PINJAMAN = "http://suksesprimasejahtera.com:5000/koperasi/cekviewpinjaman";
   // ----------------//----------------------//
 
   // static String compcode     = "/company.php";

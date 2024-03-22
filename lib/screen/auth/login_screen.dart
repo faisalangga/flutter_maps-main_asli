@@ -157,7 +157,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 controller: logincontroller.edtNohp,
                                 keyboardType: TextInputType.phone,
                                 inputFormatters: [
-                                  LengthLimitingTextInputFormatter(12),
+                                  LengthLimitingTextInputFormatter(13),
                                   FilteringTextInputFormatter.deny(
                                       RegExp('[\\-|\\,|\\.|\\#|\\*]'))
                                 ],

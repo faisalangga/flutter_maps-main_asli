@@ -7,7 +7,6 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:koperasimobile/constant/const_url.dart';
-import 'package:koperasimobile/constant/decoration_constant.dart';
 import 'package:koperasimobile/constant/dialog_constant.dart';
 import 'package:koperasimobile/constant/text_constant.dart';
 import 'package:koperasimobile/controller/member_controller.dart';
@@ -16,7 +15,6 @@ import 'package:koperasimobile/utils/utils_dialog.dart';
 import 'package:koperasimobile/widget/material/button_green_widget.dart';
 
 import '../../../model/mode_setupbank.dart';
-import '../../../utils/utils_formatnumber.dart';
 
 class SuppInsScreen extends StatefulWidget {
   final String tipeCheck;

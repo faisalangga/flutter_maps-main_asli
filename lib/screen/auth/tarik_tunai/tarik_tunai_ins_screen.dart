@@ -75,7 +75,7 @@ class _TartunScreenState extends State<TarikTunaiInsScreen> {
       SharedPreferences preferences = await SharedPreferences.getInstance();
       String? ccustcode = preferences.getString("cmember");
       String? branch = preferences.getString("cbranch");
-      String? nama = preferences.getString("user")?.substring(0, 4);
+      String? nama = preferences.getString("user")?.substring(0, 4)?.replaceAll('.', '');
       Map<String, dynamic> post = {
         "ccustcode": "$ccustcode",
         "branch": "$branch",

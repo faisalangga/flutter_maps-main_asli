@@ -5,12 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:koperasimobile/constant/dialog_constant.dart';
-import 'package:koperasimobile/constant/image_constant.dart';
 import 'package:koperasimobile/model/model_search_pinjaman.dart';
 import 'package:koperasimobile/screen/auth/pengajuan_simp/pengajuan_simp_ins_screen.dart';
 import 'package:koperasimobile/utils/utils_dialog.dart';
 import 'package:koperasimobile/widget/app_nodata.dart';
-import 'package:lottie/lottie.dart';
 
 import '../../../api/api.dart';
 import '../../../constant/const_url.dart';

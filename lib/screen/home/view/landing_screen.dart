@@ -8,9 +8,7 @@ import 'package:koperasimobile/constant/colors_icon.dart';
 import 'package:koperasimobile/constant/text_constant.dart';
 import 'package:koperasimobile/constant/utils_rp.dart';
 import 'package:koperasimobile/model/model_landingpage.dart';
-import 'package:koperasimobile/screen/home/view/report/Report_Pinjaman_Global_Screen.dart';
 import 'package:koperasimobile/screen/home/view/report/Report_Pinjaman_Screen.dart';
-import 'package:koperasimobile/screen/home/view/report/Report_Simpanan_Global_Screen.dart';
 import 'package:koperasimobile/screen/home/view/report/Report_Simpanan_Screen.dart';
 import 'package:koperasimobile/screen/home/view/sub_menu_saldo.dart';
 import 'package:koperasimobile/widget/app_shimmer.dart';
@@ -64,7 +62,9 @@ class _LandingScreenState extends State<LandingScreen> {
       SharedPreferences preferences = await SharedPreferences.getInstance();
       String? ccustcode = preferences.getString("cmember");
       String? branch = preferences.getString("cbranch");
-      String? nama = preferences.getString("user")?.substring(0, 4);
+      // String? nama = preferences.getString("user")?.substring(0, 4)?.replaceAll('.', '');
+      String? phone = preferences.getString("phone")?.trim();
+      String? nama = "A" +phone!.substring(phone.length - 4).replaceAll('-', '');
       Map<String, dynamic> post = {
         "ccustcode": "$ccustcode",
         "branch": "$branch",
@@ -504,9 +504,11 @@ class _LandingScreenState extends State<LandingScreen> {
                                         var custcode =
                                         prefs.getString('cmember');
                                         var branch = prefs.getString('cbranch');
-                                        var nama = prefs
-                                            .getString('user')
-                                            ?.substring(0, 4);
+                                        var phone = prefs.getString("phone")?.trim();
+                                        var nama = "A" +phone!.substring(phone.length - 4).replaceAll('-', '');
+                                        // var nama = prefs
+                                        //     .getString('user')
+                                        //     ?.substring(0, 4)?.replaceAll('.', '');
                                         var nmlgkp = prefs.getString('user');
                                         Navigator.push(
                                           context,
