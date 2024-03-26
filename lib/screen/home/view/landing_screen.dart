@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
-import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -99,14 +97,14 @@ class _LandingScreenState extends State<LandingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    Future<Uint8List?> getImageBytes() async {
-      final SharedPreferences prefs = await SharedPreferences.getInstance();
-      final String? base64Image = prefs.getString('poto');
-      if (base64Image != null && base64Image.isNotEmpty) {
-        return base64Decode(base64Image);
-      }
-      return null;
-    }
+    // Future<Uint8List?> getImageBytes() async {
+    //   final SharedPreferences prefs = await SharedPreferences.getInstance();
+    //   final String? base64Image = prefs.getString('poto');
+    //   if (base64Image != null && base64Image.isNotEmpty) {
+    //     return base64Decode(base64Image);
+    //   }
+    //   return null;
+    // }
 
     Future<void> _handleRefresh() async {
       try {

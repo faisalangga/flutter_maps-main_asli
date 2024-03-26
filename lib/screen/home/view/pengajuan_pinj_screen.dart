@@ -121,10 +121,14 @@ class PinjamanGridWidget extends StatefulWidget {
 class _PinjamanGridWidgetState extends State<PinjamanGridWidget> {
   List<DataView> inidatas = [];
   String _searchQuery = '';
+  bool isdtksg = false;
+  bool iscreate = false;
+  bool isLoading = true;
 
   @override
   void initState() {
     super.initState();
+    isLoading = true;
     fetchPinjamans();
   }
 
@@ -155,13 +159,28 @@ class _PinjamanGridWidgetState extends State<PinjamanGridWidget> {
         Navigator.pop(context);
         final jsonData = json.decode(response.body);
         final Pinjaman datanya = Pinjaman.fromJson(jsonData);
-
         if (datanya.data != null && datanya.data!.isNotEmpty) {
           setState(() {
             inidatas = datanya.data!;
-            // print('fais initdata ${inidatas.firstOrNull!.duedate}');
+            isLoading = false;
+            // print('fais initdataaaa ${inidatas.length}');
           });
+          //proteksi
+          if (inidatas.lastOrNull!.cStatus == 'F') {
+            setState(() {
+              iscreate = true;
+              isLoading = false;
+            });
+          } else {
+            setState(() {
+              iscreate = false;
+            });
+          }
         } else {
+          setState(() {
+            iscreate = true;
+          });
+          // isdtksg = true;
           // Navigator.pop(context);
           print('fais ERROR data kosong');
         }
@@ -175,52 +194,12 @@ class _PinjamanGridWidgetState extends State<PinjamanGridWidget> {
     }
   }
 
-  // Future<List<DataView>> fetchPinjamans() async {
-  //   SharedPreferences preferences = await SharedPreferences.getInstance();
-  //   var cuser = preferences.getString("cmember");
-  //   try {
-  //     DialogConstant.loading(context!, 'Mohon Tunggu...');
-  //     await Future.delayed(const Duration(milliseconds: 500));
-  //     Map<String, String> headers = {
-  //       'Content-Type': 'application/json',
-  //     };
-  //     Map<String, String> body = {
-  //       'input': '$cuser',
-  //     };
-  //     final response = await http.post(
-  //       Uri.parse(ConstUrl.BASE_URL_VIEW_PINJAMAN),
-  //       headers: headers,
-  //       body: json.encode(body),
-  //     );
-  //     if (response.statusCode == 200) {
-  //       Navigator.pop(context);
-  //       final jsonData = json.decode(response.body);
-  //       final Pinjaman datanya = Pinjaman.fromJson(jsonData);
-  //
-  //       if (datanya.data != null && datanya.data!.isNotEmpty) {
-  //         setState(() {
-  //           inidatas = datanya.data!;
-  //         });
-  //         return inidatas;
-  //       } else {
-  //         print('fais ERROR data kosong');
-  //       }
-  //     } else {
-  //       Navigator.pop(context);
-  //       print(' fais Error: ${response.statusCode}');
-  //     }
-  //   } catch (error) {
-  //     Navigator.pop(context);
-  //     print(' faisError: $error');
-  //   }
-  //   return [];
-  // }
   bool _searchMode = false;
 
   @override
   Widget build(BuildContext context) {
-    bool isPendingApproval =
-        !inidatas.any((pinjaman) => pinjaman.cStatus == 'F');
+    // bool isPendingApproval = inidatas.lastOrNull!.cStatus == '6';
+    // print('fais isss ${isPendingApproval}');
     return Scaffold(
       appBar: AppBar(
         title: _searchMode
@@ -284,74 +263,42 @@ class _PinjamanGridWidgetState extends State<PinjamanGridWidget> {
                 return buildPinjamanCard(filteredPinj);
               },
             ),
-      // FutureBuilder<List<DataView>>(
-      //   future: fetchPinjamans(),
-      //   builder: (context, snapshot) {
-      //     if (snapshot.connectionState == ConnectionState.waiting) {
-      //       return DialogConstant.loading(context!, 'Memproses Data...');
-      //     } else if (snapshot.hasError) {
-      //       return AppNoData(ket: 'Error: ${snapshot.error}');
-      //     } else {
-      //       List<DataView> inidatas = snapshot.data!;
-      //       print('faiss inidatas : $inidatas');
-      //       return inidatas.isEmpty
-      //           ? AppNoData(ket: 'Data tidak ditemukan')
-      //           : ListView.builder(
-      //         itemCount: _searchMode
-      //             ? inidatas
-      //             .where((pinjaman) => pinjaman.cdocno!
-      //             .toLowerCase()
-      //             .contains(_searchQuery.toLowerCase()))
-      //             .length
-      //             : inidatas.length,
-      //         itemBuilder: (context, index) {
-      //           final inipinj = _searchMode
-      //               ? inidatas.where((inipinj) => inipinj.cdocno!
-      //               .toLowerCase()
-      //               .contains(_searchQuery.toLowerCase()))
-      //               : inidatas;
-      //           final filteredPinj = inipinj.elementAt(index);
-      //           return buildPinjamanCard(filteredPinj);
-      //         },
-      //       );
-      //     }
-      //   },
-      // ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          // bool isPendingApproval =
-          // !inidatas.any((pinjaman) => pinjaman.cStatus == '3');
-          if (isPendingApproval) {
-            showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return AlertDialog(
-                  title: Text('Peringatan'),
-                  content: Text(
-                    'Tidak dapat membuat pinjaman baru, Ada pinjaman yang belum Lunas.',
-                    textAlign: TextAlign.center,
-                  ),
-                  actions: <Widget>[
-                    TextButton(
-                      child: Text('Tutup'),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
+          iscreate
+              ? Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AjuSimpInsScreen(
+                      tipeCheck: 'ini create',
                     ),
-                  ],
+                  ),
+                )
+              : showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: Text('Peringatan'),
+                      content:
+                      // isPendingApproval ? Text(
+                      //   'Tidak dapat membuat pinjaman baru. Ada Pinjaman yg belum Approve',
+                      //   textAlign: TextAlign.center,
+                      // ) :
+                      Text(
+                        'Tidak dapat membuat pinjaman baru. Ada Pinjaman yg belum Lunas',
+                      textAlign: TextAlign.center,
+                      ) ,
+                      actions: <Widget>[
+                        TextButton(
+                          child: Text('Tutup'),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      ],
+                    );
+                  },
                 );
-              },
-            );
-          } else {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => AjuSimpInsScreen(
-                  tipeCheck: 'ini create',
-                ),
-              ),
-            );
-          }
         },
         icon: Icon(Icons.add_circle, color: Colors.white),
         label: Text('Add',
@@ -385,216 +332,164 @@ class _PinjamanGridWidgetState extends State<PinjamanGridWidget> {
           ),
         );
       },
-      child: Padding(
-        padding: EdgeInsets.fromLTRB(3.0, 3.0, 3.0, 0.0),
-        child: Card(
-          elevation: 4,
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10.0),
-              border: Border.all(
-                color: Colors.black,
-                width: 0.9,
-              ),
-            ),
-            child: ListTile(
-              tileColor: Colors.white,
-              leading: CircleAvatar(
-                backgroundImage: AssetImage(
-                  pinjaman.cStatus == 'F'
-                      ? "assets/images/checklist.png"
-                      : "assets/images/rejected.png",
-                ),
-                backgroundColor: pinjaman.cStatus == 'F'
-                    ? Colors.green.shade200
-                    : Colors.lightBlue.shade100,
-                radius: 20,
-              ),
-              title: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.lightBlue.shade100,
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                    child: Padding(
-                      padding: EdgeInsets.all(5.0),
-                      child: Text(
-                        '${pinjaman.cdocno ?? '(belum ada)'}',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 15,
-                          color: Colors.black87,
-                        ),
-                      ),
-                    ),
+      child: Column(
+        children: [
+          // Text('${pinjaman.cdocno}'),
+          Padding(
+            padding: EdgeInsets.fromLTRB(3.0, 3.0, 3.0, 0.0),
+            child: Card(
+              elevation: 4,
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10.0),
+                  border: Border.all(
+                    color: Colors.black,
+                    width: 0.9,
                   ),
-                  // pinjaman.cStatus == '0'
-                  //     ? IconButton(
-                  //         icon: Stack(
-                  //           children: <Widget>[
-                  //             Center(
-                  //               child: Icon(
-                  //                 Icons.delete_forever_sharp,
-                  //                 color: Colors.redAccent.shade400,
-                  //                 size: 30,
-                  //               ),
-                  //             ),
-                  //           ],
-                  //         ),
-                  //         onPressed: () {
-                  //           // Logika penghapusan di sini
-                  //           // Contoh: fungsiHapusItem(product);
-                  //           showDialog(
-                  //             context: context,
-                  //             builder: (BuildContext context) {
-                  //               return AlertDialog(
-                  //                 title: Text(
-                  //                   'Tidak Bisa Hapus',
-                  //                   style: TextStyle(
-                  //                     fontWeight: FontWeight.bold,
-                  //                     fontSize: 15,
-                  //                     color: Colors.black87,
-                  //                   ),
-                  //                 ),
-                  //                 // content: Text('Pesan atau alasan mengapa item ini tidak dapat dihapus.'),
-                  //                 actions: <Widget>[
-                  //                   TextButton(
-                  //                     child: Text('Tutup'),
-                  //                     onPressed: () {
-                  //                       Navigator.of(context).pop();
-                  //                     },
-                  //                   ),
-                  //                 ],
-                  //               );
-                  //             },
-                  //           );
-                  //         },
-                  //       )
-                  //     :
-                  //         Column(
-                  //           children: [
-                  //             CircleAvatar(
-                  //               backgroundColor: Colors.transparent,
-                  //               child: pinjaman.cStatus == 'F'
-                  //                   ? Image.asset(
-                  //                 "assets/images/lunas.png",
-                  //                 width: 40,
-                  //                 height: 40,
-                  //                 color: Colors.red,
-                  //               )
-                  //                   : SizedBox(height: 40),
-                  //             ),
-                  //           ],
-                  //         ),
-                ],
-              ),
-              subtitle: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
+                ),
+                child:
+                    // isLoading == true
+                    // ? AppShimmer(width: width * 0.50)
+                    // :
+                    ListTile(
+                  tileColor: Colors.white,
+                  leading: CircleAvatar(
+                    backgroundImage: AssetImage(
+                      pinjaman.cStatus == 'F'
+                          ? "assets/images/checklist.png"
+                          : "assets/images/rejected.png",
+                    ),
+                    backgroundColor: pinjaman.cStatus == 'F'
+                        ? Colors.green.shade200
+                        : Colors.lightBlue.shade100,
+                    radius: 20,
+                  ),
+                  title: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Container(
                         decoration: BoxDecoration(
-                          // color: Colors.green.shade100,
+                          color: Colors.lightBlue.shade100,
                           borderRadius: BorderRadius.circular(10.0),
                         ),
-                        child: Text(
-                          ' Pinjaman : ${duet(pinjaman.mNilaiPinjaman ?? '')}   ',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w700,
-                            fontSize: 14,
-                            color: Colors.black,
+                        child: Padding(
+                          padding: EdgeInsets.all(5.0),
+                          child: Text(
+                            '${pinjaman.cdocno ?? '(belum ada)'}',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15,
+                              color: Colors.black87,
+                            ),
                           ),
-                          textAlign: TextAlign.center,
                         ),
                       ),
                     ],
                   ),
-                  SizedBox(height: 1),
-                  Text(
-                    '  ${pinjaman.tgl}',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.w400,
-                      fontSize: 14,
-                    ),
-                    textAlign: TextAlign.start,
-                  ),
-                  SizedBox(height: 2),
-                  Text(
-                    '  Tenor : ${pinjaman.tenor} Bulan',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w400,
-                      color: Colors.black,
-                      fontSize: 14,
-                    ),
-                    textAlign: TextAlign.start,
-                  ),
-                  SizedBox(height: 2),
-                  Text(
-                    '  Tagihan : ${duet(pinjaman.mValue1 ?? '')}',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w400,
-                      color: Colors.black,
-                      fontSize: 14,
-                    ),
-                    textAlign: TextAlign.start,
-                  ),
-                ],
-              ),
-              trailing: pinjaman.cStatus == '0'
-                  ? IconButton(
-                      icon: Stack(
-                        children: <Widget>[
-                          Center(
-                            child: Icon(
-                              Icons.delete_forever_sharp,
-                              color: Colors.redAccent.shade400,
-                              size: 30,
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              // color: Colors.green.shade100,
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                            child: Text(
+                              ' Pinjaman : ${duet(pinjaman.mNilaiPinjaman ?? '')}   ',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w700,
+                                fontSize: 14,
+                                color: Colors.black,
+                              ),
+                              textAlign: TextAlign.center,
                             ),
                           ),
                         ],
                       ),
-                      onPressed: () {
-                        // Logika penghapusan di sini
-                        // Contoh: fungsiHapusItem(product);
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              title: Text(
-                                'Tidak Bisa Hapus',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 15,
-                                  color: Colors.black87,
-                                ),
-                              ),
-                              // content: Text('Pesan atau alasan mengapa item ini tidak dapat dihapus.'),
-                              actions: <Widget>[
-                                TextButton(
-                                  child: Text('Tutup'),
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                ),
-                              ],
+                      SizedBox(height: 1),
+                      Text(
+                        '  ${pinjaman.tgl}',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.w400,
+                          fontSize: 14,
+                        ),
+                        textAlign: TextAlign.start,
+                      ),
+                      SizedBox(height: 2),
+                      Text(
+                        '  Tenor : ${pinjaman.tenor} Bulan',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w400,
+                          color: Colors.black,
+                          fontSize: 14,
+                        ),
+                        textAlign: TextAlign.start,
+                      ),
+                      SizedBox(height: 2),
+                      Text(
+                        '  Tagihan : ${duet(pinjaman.mValue1 ?? '')}',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w400,
+                          color: Colors.black,
+                          fontSize: 14,
+                        ),
+                        textAlign: TextAlign.start,
+                      ),
+                    ],
+                  ),
+                  trailing: pinjaman.cStatus == '0'
+                      ? InkWell(
+                          onTap: () {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: Text(
+                                    'Tidak Bisa Hapus',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 15,
+                                      color: Colors.black87,
+                                    ),
+                                  ),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      child: Text('Tutup'),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                  ],
+                                );
+                              },
                             );
                           },
-                        );
-                      },
-                    )
-                  : pinjaman.cStatus == 'F'
-                      ? Image.asset(
-                          "assets/images/lunas.jpg",
-                          width: 60,
+                          child: Icon(
+                            Icons.delete_forever_sharp,
+                            color: Colors.redAccent.shade400,
+                            size: 30,
+                          ),
                         )
-                      : SizedBox(height: 40),
+                      : pinjaman.cStatus == 'F'
+                          ? Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Image.asset(
+                                  "assets/images/terpaid.jpg",
+                                  width: 60,
+                                ),
+                                SizedBox(width: 8),
+                              ],
+                            )
+                          : SizedBox(height: 20),
+                ),
+              ),
             ),
-          ),
-        ),
+          )
+        ],
       ),
     );
   }

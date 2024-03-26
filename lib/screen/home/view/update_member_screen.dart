@@ -1,13 +1,9 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:koperasimobile/screen/auth/member/bank_norek_upd_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../../../constant/dialog_constant.dart';
-import '../../auth/member/upd_member_screen.dart';
 
 class UpdMemberScreen extends StatefulWidget {
   const UpdMemberScreen({Key? key}) : super(key: key);

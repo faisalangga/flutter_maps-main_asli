@@ -286,7 +286,7 @@ class _AjuSimpScreenState extends State<AjuSimpInsScreen> {
                           _valueCompSelected = data.bulan.toString();
                           _jasa = data.nbiayajasa!.toString();
                           _inibiayadm = data.mbiayaadmin!.toString();
-                          print('faisxxxx + $_jasa $_inibiayadm');
+                          // print('faisxxxx + $_jasa $_inibiayadm');
                           DateTime hariini = DateTime.now();
                           // print ('fais' + tenor()! ??"0");
                           DateTime dueDate =
@@ -295,7 +295,7 @@ class _AjuSimpScreenState extends State<AjuSimpInsScreen> {
                           _duedate = dueDate.toString();
                           // print('faisaasssss');
                           // print('faisaaa + $_duedate');
-                          print(tenor());
+                          // print(tenor());
                           // print('fais $_valueCompSelected');
                         });
                       },

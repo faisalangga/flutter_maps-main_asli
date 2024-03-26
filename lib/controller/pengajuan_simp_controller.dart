@@ -126,7 +126,7 @@ class AjuSimpController extends GetxController {
     post['jaminan'] = data['jaminan'];
     post['duedate'] = data['duedate'];
     post['sisa'] = data['sisa'];
-    print('fais $post');
+    // print('fais $post');
 
     API.basePostGolang(ConstUrl.insertPinjaman, post, header, true,
         (result, error) {
